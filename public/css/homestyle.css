@@ -1,0 +1,145 @@
+/* Home header */
+.jumbotron{
+  background-image: url("../image/home-image.png");
+  border-radius: 0px;
+  color: white;
+  background-size: cover;
+}
+.navbar{
+  height: 100px;
+
+}
+.line-title{
+  border: 2px solid #248f24;
+  border-radius: 5px;
+  width: 300px;
+}
+/* font style -------*/
+.title-1{
+  color: white;
+  font-size: 5em;
+  font-weight: bold;
+}
+.title-2{
+  color: green;
+}
+.brand-2{
+  color: #248f24;
+}
+/* end font style */
+/* navbar style */
+.navbar {
+    transition: all 0.4s;
+}
+.navbar.active{
+  color:#248f24;
+}
+
+.navbar .nav-link {
+    color: #fff;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #bfbfbf;
+    text-decoration: none;
+}
+
+.navbar .navbar-brand {
+    color: #fff;
+}
+
+
+/* Change navbar styling on scroll */
+.navbar.active {
+    background: #fff;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1);
+    height: 70px;
+}
+
+.navbar.active .nav-link {
+    color: #555;
+}
+
+.navbar.active .nav-link:hover,
+.navbar.active .nav-link:focus {
+    color: #737373;
+    text-decoration: none;
+}
+
+.navbar.active .navbar-brand {
+    color: #555;
+}
+
+
+/* Change navbar styling on small viewports */
+@media (max-width: 800px) {
+    .navbar {
+        background: #fff;
+    }
+
+    .navbar .navbar-brand, .navbar .nav-link {
+        color: #555;
+    }
+}
+/* end navbar style */
+/* list style */
+.list-style {
+  counter-reset: index;
+  padding: 0;
+  max-width: 500px;
+}
+
+/* List element */
+.list-item {
+  counter-increment: index;
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  box-sizing: border-box;
+}
+
+
+/* Element counter */
+.list-item::before {
+  content: counters(index, ".", decimal-leading-zero);
+  font-size: 1.5rem;
+  text-align: right;
+  font-weight: bold;
+  min-width: 50px;
+  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+  align-self: flex-start;
+  background-image: linear-gradient(to bottom, aquamarine, orangered);
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* Element separation */
+.list-item + .list-item {
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+@use postcss-preset-env {
+  stage: 0;
+  autoprefixer: {
+    grid: true;
+  }
+  browsers: last 2 versions
+}
+/* end list style */
+/* footer */
+ footer{
+   background-color: black;
+   width: 100%;
+   color: white;
+   padding: 100px;
+ }
+
+/* end footer */
+@media only screen and (max-width: 767px) {
+  .img-sizing {
+    display: none;
+  }
+}
