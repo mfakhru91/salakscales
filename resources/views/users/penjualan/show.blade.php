@@ -105,15 +105,14 @@
           <span class="help-block" >{{ $errors->first('item') }}</span>
           @endif
           <div class="{{ $errors->has('item')? 'has-error':'' }} "></div>
-          <form action="{{ route('print.item') }}" method="post">
+          <form action="{{ route('print.item.buyer') }}" method="post">
             @csrf
-            <input type="hidden" name="saller_id" value="{{ $buyyers->id }}">
+            <input type="hidden" name="buyer_id" value="{{ $buyyers->id }}">
             <button type="submit" class="btn btn-info"><span class="lnr lnr-printer"></span> Print</button>
             <table class="table table-striped">
             <thead>
               <tr>
                 <th> <input class="form-check-input" type="checkbox" id="checkall" value="option2"> </th>
-          </form>
                 <th>TANGGAL</th>
                 <th>TONASE</th>
                 <th>HARGA</th>
@@ -123,13 +122,21 @@
             </thead>
             <tbody>
               @foreach( $buyyerItem as $item )
-                <tr>
-                  <td> <input class="form-check-input itemchecked" type="checkbox" name="item[{{ $item->id }}]" value="{{ $item->id }}"> </td>
+              <tr>
+                <td> <input class="form-check-input itemchecked" type="checkbox" name="item[{{ $item->id }}]" value="{{ $item->id }}"> </td>
+              </form>
                   <td> {{ $item->date_time }} </td>
                   <td> {{ $item->new_tonase }} </td>
                   <td> Rp. {{ number_format($item->price, 2, ',', '.') }} </td>
                   <td>
-                    <button type="submit" class="btn btn-light"><span class="lnr lnr-printer"></span> 1(fake) </button>
+                    <form action="{{ route('print.note.buyer') }}" id="note" method="post">
+                      @csrf
+                      <input type="hidden" name="buyer_id" value="{{ $buyyers->id  }}">
+                      <input type="hidden" name="note" value="{{ $item->note_id}}">
+                      @if($item->note_id)
+                      <button type="submit" class="btn btn-light"><span class="lnr lnr-printer"></span> {{ $item->note_id}}</button>
+                      @endif
+                    </form>
                   </td>
                   <td>
                     <a href="{{ route('barang.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>

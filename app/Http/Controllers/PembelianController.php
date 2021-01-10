@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use App\Seller;
 use App\Item;
+use App\Note;
 use Auth;
 
 class PembelianController extends Controller

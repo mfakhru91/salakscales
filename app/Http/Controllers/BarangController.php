@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Item;
 use App\Seller;
 use App\Dvitem;
+use App\Buyer;
 use Auth;
 
 class BarangController extends Controller
@@ -140,7 +141,7 @@ class BarangController extends Controller
     $items->delete();
     return redirect()->route('barang.index')->with('status', '1 barang berhasil dihapus');
   }
-  public function print(Request $request)
+  public function printSeller(Request $request)
   {
     $this->validate($request, [
       'item' => 'required'
@@ -153,10 +154,23 @@ class BarangController extends Controller
       'seller' => $seller,
     ]);
   }
+  public function printBuyer(Request $request)
+  {
+    $this->validate($request, [
+      'item' => 'required'
+    ]);
+    $buyer = Buyer::findOrFail($request->get('buyer_id'));
+    $item = $request->get('item');
+    $dvitems = Dvitem::find($item);
+    return view('users.barang.byprint', [
+      'items' => $dvitems,
+      'buyer' => $buyer,
+    ]);
+  }
   public function delivery(Request $request)
   {
     // get data delivered item
-    $dvitem = Dvitem::select('new_tonase','old_tonase')
+    $dvitem = Dvitem::select('new_tonase', 'old_tonase')
       ->orderBy('date_time', 'ASC')
       ->limit(1)
       ->where('user_id', Auth::id())

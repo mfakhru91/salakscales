@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Dvitem;
 use App\Note;
 use App\Item;
+use Auth;
+
 class NoteController extends Controller
 {
     /**
@@ -34,15 +37,15 @@ class NoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $item_id = $request->get('item_id');
         $note = new Note;
         $note->price = $request->get('price_total');
         $note->tonase = $request->get('tonase_total');
         $note->save();
-        $note_id = Note::latest('id')->first();
-        $item = Item::whereIn('id',$item_id)->update(['note_id'=>$note_id->id]);
-        return redirect()->route('pembelian.show',$request->get('seller_id'));
+        $note_id = Note::latest('id')->where('user_id', Auth::id())->first();
+        $item = Item::whereIn('id', $item_id)->update(['note_id' => $note_id->id]);
+        return redirect()->route('pembelian.show', $request->get('seller_id'));
     }
     /**
      * Display the specified resource.
@@ -87,5 +90,17 @@ class NoteController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function buyerStore(Request $request)
+    {
+        $item_id = $request->get('item_id');
+        $note = new Note;
+        $note->price = $request->get('price_total');
+        $note->tonase = $request->get('tonase_total');
+        $note->user_id = Auth::id();
+        $note->save();
+        $note_id = Note::latest('id')->where('user_id', Auth::id())->first();
+        $item = Dvitem::whereIn('id', $item_id)->update(['note_id' => $note_id->id]);
+        return redirect()->route('penjualan.show', $request->get('buyer_id'));
     }
 }

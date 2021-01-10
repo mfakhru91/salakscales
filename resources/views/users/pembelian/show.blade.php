@@ -105,7 +105,7 @@
           <span class="help-block" >{{ $errors->first('item') }}</span>
           @endif
           <div class="{{ $errors->has('item')? 'has-error':'' }} "></div>
-          <form action="{{ route('print.item') }}" method="post">
+          <form action="{{ route('print.item.seller') }}" method="post">
             @csrf
             <input type="hidden" name="saller_id" value="{{ $seller->id }}">
             <button type="submit" class="btn btn-info"><span class="lnr lnr-printer"></span> Print</button>
@@ -113,7 +113,6 @@
             <thead>
               <tr>
                 <th> <input class="form-check-input" type="checkbox" id="checkall" value="option2"> </th>
-          </form>
                 <th>TANGGAL</th>
                 <th>TONASE</th>
                 <th>HARGA</th>
@@ -124,8 +123,9 @@
             </thead>
             <tbody>
               @foreach( $seller->item as $item )
-                <tr>
-                  <td> <input class="form-check-input itemchecked" type="checkbox" name="item[{{ $item->id }}]" value="{{ $item->id }}"> </td>
+              <tr>
+                <td> <input class="form-check-input itemchecked" type="checkbox" name="item[{{ $item->id }}]" value="{{ $item->id }}"> </td>
+              </form>
                   <td> {{ $item->date($item->created_at) }} </td>
                   <td> {{ $item->tonase }} </td>
                   <td> Rp. {{ number_format($item->price, 2, ',', '.') }} </td>
