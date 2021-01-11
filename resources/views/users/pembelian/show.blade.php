@@ -167,7 +167,7 @@
   $(document).ready(function() {
     $('#get-tonase').click(function(){
       $.ajax({
-        url:"http://localhost/salakscales/api/tonase",
+        url:"http://localhost/skripsi/api/tonase/",
         type:"GET",
         async : true,
         success:function(result)
@@ -180,11 +180,12 @@
     })
     $('#price').click(function(){
       $.ajax({
-        url:"http://localhost/salakscales/api/setting/"+user_id,
+        url:"http://localhost/skripsi/api/setting/"+user_id,
         type:"GET",
         async : true,
         success:function(result)
         {
+          console.log(result)
           let priceData = JSON.stringify(result.data[0].price)
           let getTonase = $('#tonase').val()
           let sumPrice = getTonase * priceData

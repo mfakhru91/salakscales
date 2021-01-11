@@ -162,7 +162,7 @@
     $(document).ready(function() {
         $('#valtonase').click(function(){
             $.ajax({
-                url:"http://localhost/salakscales/api/setting/"+user_id,
+                url:"http://localhost/skripsi/api/setting/"+user_id,
                 type:"GET",
                 async : true,
                 success:function(result)

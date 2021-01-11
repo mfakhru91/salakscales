@@ -58,7 +58,6 @@
 	<!-- Javascript -->
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	<script src="{{asset('public/klorofil/assets/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
-	<script src="{{asset('public/klorofil/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 	<script src="{{asset('public/klorofil/assets/scripts/klorofil-common.js')}}"></script>
 	@yield('footer')
 	</body>
