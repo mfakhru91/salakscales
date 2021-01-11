@@ -42,6 +42,9 @@
                     <tr>
                         <td colspan="4" class="text-center">
                             <input type="hidden" value="{{$tonase}}" name="tonase">
+                            @foreach($item_id as $id)
+                                <input type="hidden" name="items_id[]" value="{{$id}}">
+                            @endforeach
                             <button type="submit" class="btn btn-primary">Confrim</button>
                         </td>
                     </tr>

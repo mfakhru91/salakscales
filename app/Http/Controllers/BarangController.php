@@ -180,13 +180,6 @@ class BarangController extends Controller
     if ($dvitem->isEmpty()) {
       $item_id = $request->get('item');
 
-      // update to confrim delivered item
-      $item = Item::whereIn('id', $item_id)
-        ->update([
-          'delivery' => '1',
-          'status' => 'sold'
-        ]);
-
       // get items id
       $items = Item::whereIn('id', $item_id)->get();
 
@@ -197,16 +190,12 @@ class BarangController extends Controller
 
       return view('users.dvbarang.index', [
         'items' => $items,
-        'tonase' => $tonase
+        'tonase' => $tonase,
+        'item_id' => $item_id,
       ]);
     } else {
       if ($dvitem[0]->old_tonase == 0) {
         $item_id = $request->get('item');
-        $item = Item::whereIn('id', $item_id)
-          ->update([
-            'delivery' => '1',
-            'status' => 'sold'
-          ]);
         $items = Item::whereIn('id', $item_id)->get();
         $price = DB::table('items')
           ->whereIn('id', $item_id)
@@ -217,7 +206,8 @@ class BarangController extends Controller
         return view('users.dvbarang.index', [
           'items' => $items,
           'price' => $price,
-          'tonase' => $tonase
+          'tonase' => $tonase,
+          'item_id' => $item_id,
         ]);
       } else {
         return redirect()->route('barang.index')->with('status', 'barang belum habis tolong selesaikan transaksi terlebih dahulu');
@@ -226,6 +216,12 @@ class BarangController extends Controller
   }
   public function dvitem(Request $request)
   {
+    $items_id = $request->get('items_id');
+    $item = Item::whereIn('id', $items_id)
+      ->update([
+        'delivery' => '1',
+        'status' => 'sold'
+      ]);
     $date = Carbon::now()->format('Y-m-d');
     $item = new Dvitem;
     $item->user_id = Auth::id();
