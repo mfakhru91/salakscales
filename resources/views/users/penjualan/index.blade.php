@@ -40,8 +40,8 @@
           <td>{{ $by->no_telp }}</td>
           <td>null</td>
           <td>
-            <a href="{{ route('pembelian.edit',$by->id) }}" class="btn btn-warning"><span class="lnr lnr-pencil"></span></a>
-            <a href="{{ route('pembelian.delete',$by->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
+            <a href="{{ route('penjualan.edit',$by->id) }}" class="btn btn-warning"><span class="lnr lnr-pencil"></span></a>
+            <a href="{{ route('penjualan.delete',$by->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
             <a href="{{ route('penjualan.show',$by->id) }}" class="btn btn-info"><span class="lnr lnr-eye"></span></a>
           </td>
         </tbody>

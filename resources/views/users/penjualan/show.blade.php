@@ -32,11 +32,12 @@
           <h4 class="heading">Basic Info</h4>
           <ul class="list-unstyled list-justify">
             <li>Nama <span>{{ $buyyers->name}}</span></li>
+            <li>Pasar <span>{{ $buyyers->market }}</span></li>
             <li>No Telp <span>{{ $buyyers->no_telp }}</span></li>
             <li>Alamat <span>{{ $buyyers->address }}</span></li>
           </ul>
         </div>
-        <div class="text-center"><a href="{{ route('pembelian.edit',$buyyers->id) }}" class="btn btn-primary">Edit Profile</a></div>
+        <div class="text-center"><a href="{{ route('penjualan.edit',$buyyers->id) }}" class="btn btn-primary">Edit Profile</a></div>
       </div>
       <!-- END PROFILE DETAIL -->
     </div>

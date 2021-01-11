@@ -34,12 +34,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/pembelian/add_item', 'PembelianController@addItems')->name('pembelian.add.item');
 	Route::post('/pejualan/add_item', 'PenjualanController@addItems')->name('penjualan.add.item');
 	Route::get('/pembelian/{id}/delete', 'PembelianController@delete')->name('pembelian.delete');
+	Route::get('/penjualan/{id}/delete', 'PenjualanController@delete')->name('penjualan.delete');
 	Route::post('/barang/delivery', 'BarangController@delivery')->name('barang.delivery');
 	Route::post('/barang/dvitem', 'BarangController@dvitem')->name('barang.dvitem');
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('pembelian', 'PembelianController');
-	Route::resource('metal', 'MetalController');
 	Route::resource('penjualan', 'PenjualanController');
+	Route::resource('metal', 'MetalController');
 	Route::resource('barang', 'BarangController');
 	Route::resource('note', 'NoteController');
 	Route::resource('setting','SettingController');

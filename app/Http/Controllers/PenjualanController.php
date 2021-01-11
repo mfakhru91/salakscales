@@ -91,8 +91,8 @@ class PenjualanController extends Controller
 
         // get buyyer delivered item
         $buyyerDevItem = Dvitem::where('user_id', $user)
-        ->where('buyer_id', $id)
-        ->get();
+            ->where('buyer_id', $id)
+            ->get();
         return view('users.penjualan.show', [
             'buyyers' => $buyyers,
             'user' => $user,
@@ -109,7 +109,10 @@ class PenjualanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $buyer = Buyer::findOrFail($id);
+        return view('users.penjualan.edit', [
+            'buyer' => $buyer,
+        ]);
     }
 
     /**
@@ -121,7 +124,20 @@ class PenjualanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:5',
+            'market'=> 'required',
+            'address' => 'required',
+            'no_telp' => 'required',
+          ]);
+          $update = Buyer::findOrFail($id);
+          $update->user_id = Auth::user()->id;
+          $update->name = $request->get('name');
+          $update->market = $request->get('market');
+          $update->address = $request->get('address');
+          $update->no_telp = $request->get('no_telp');
+          $update->save();
+          return redirect()->route('penjualan.show', $id)->with('status', 'data pembeli berhasil diperbarui');
     }
 
     /**
@@ -133,6 +149,13 @@ class PenjualanController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function delete($id)
+    {
+        $buyer = Buyer::findOrFail($id);
+        $buyer->delete();
+        return redirect()->route('penjualan.index')->with('status', $buyer->name . ' berhasil dihapus');
     }
 
     public function addItems(Request $request)
