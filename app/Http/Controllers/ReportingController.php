@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Setting;
-use App\User;
+
+use App\Dvitem;
+use App\Buyer;
 use Auth;
 
-class SettingController extends Controller
+
+class ReportingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,20 +18,12 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $getUser = Auth::user();
-        $getSetting = Setting::where('user_id', Auth::id())->first();
-        $Setting = json_decode($getSetting);
-        if (empty($Setting)) {
-            $newSetting = new Setting;
-            $newSetting->user_id = Auth::id();
-            $newSetting->save();
-            return view('users.setting.index');
-        } else {
-            return view('users.setting.index', [
-                'settings' => $getSetting,
-                'user' => $getUser,
-            ]);
-        }
+        $dvitem =  Dvitem::where('user_id', Auth::id())->get();
+        $buyer = Buyer::where('user_id', Auth::id())->get();
+        return view('users.laporan.index', [
+            'dvitem' => $dvitem,
+            'buyer' => $buyer,
+        ]);
     }
 
     /**
@@ -39,7 +33,7 @@ class SettingController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -84,16 +78,7 @@ class SettingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updateUser = User::findOrFail($id);
-        $updateUser->name = $request->get('username');
-        $updateUser->save();
-        $Setting = Setting::where('user_id', $id)
-            ->update([
-                'user_id' => Auth::id(),
-                'price' => $request->get('price'),
-                'tools_id' => $request->get('tools'),
-            ]);
-        return redirect()->route('setting.index');
+        //
     }
 
     /**
@@ -105,5 +90,17 @@ class SettingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function searchMont(Request $request)
+    {
+        $dvitem =  Dvitem::where('user_id', Auth::id())
+        ->whereDate('date_time',$request->get('cari'))
+        ->get();
+        $buyer = Buyer::where('user_id', Auth::id())->get();
+        return view('users.laporan.index', [
+            'dvitem' => $dvitem,
+            'buyer' => $buyer,
+        ]);
     }
 }

@@ -7,10 +7,16 @@
      <i class="fa fa-check-circle"></i> {{session('status')}}
   </div>
 @endif
+@if(session('error'))
+  <div class="alert alert-danger alert-dismissible" role="alert">
+     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+     <i class="fas fa-exclamation-circle"></i> {{session('error')}}
+  </div>
+@endif
 <div class="panel panel-profile">
   <div class="clearfix" style=" min-height: 450px">
     <!-- LEFT COLUMN -->
-    <div class="profile-left">
+    <div class="profile-left" style="width: 30%">
       <!-- PROFILE HEADER -->
       <div class="profile-header">
         <div class="overlay"></div>
@@ -29,21 +35,45 @@
       <!-- PROFILE DETAIL -->
       <div class="profile-detail">
         <div class="profile-info">
-          <h4 class="heading">Basic Info</h4>
+          <h4 class="heading">Data Pasar</h4>
           <ul class="list-unstyled list-justify">
             <li>Nama <span>{{ $buyyers->name}}</span></li>
             <li>Pasar <span>{{ $buyyers->market }}</span></li>
             <li>No Telp <span>{{ $buyyers->no_telp }}</span></li>
             <li>Alamat <span>{{ $buyyers->address }}</span></li>
           </ul>
+          <hr>
         </div>
-        <div class="text-center"><a href="{{ route('penjualan.edit',$buyyers->id) }}" class="btn btn-primary">Edit Profile</a></div>
+        <div class="profile-info">
+          <h4 class="heading">Akomodasi</h4>
+          <ul class="list-unstyled list-justify">
+            <li>Harga Jual<span>Rp. {{ number_format($buyyers->selling_price, 2, ',', '.') }}</span></li>
+            <li>Alat<span>Rp. {{ number_format($buyyers->tools, 2, ',', '.') }}</span></li>
+            <li>Pengepakan<span>Rp. {{ number_format($buyyers->packing, 2, ',', '.') }}</span></li>
+            <li>Pengiriman<span>Rp. {{ number_format($buyyers->shipping_charges, 2, ',', '.') }}</span></li>
+            @php
+             $get_profit_y = $yearItem->sum('income') - $yearItem->sum('price') - ($buyyers->tools * $yearItem->sum('new_tonase')) -  ($buyyers->packing * $yearItem->sum('new_tonase')) - ($buyyers->shipping_charges * $yearItem->sum('new_tonase'));
+             $get_profit_m = $monthItem->sum('income') - $monthItem->sum('price') - ($buyyers->tools * $monthItem->sum('new_tonase')) -  ($buyyers->packing * $monthItem->sum('new_tonase')) - ($buyyers->shipping_charges * $monthItem->sum('new_tonase'));
+             $get_profit_d = $dayItem->sum('income') - $dayItem->sum('price') - ($buyyers->tools * $dayItem->sum('new_tonase')) -  ($buyyers->packing * $dayItem->sum('new_tonase')) - ($buyyers->shipping_charges * $dayItem->sum('new_tonase'));
+            @endphp
+            <li><b>Keuntungan<span>Rp. {{ number_format($get_profit_m, 2, ',', '.') }}</span></b></li>
+          </ul>
+        </div>
+        <div class="text-center"><a href="{{ route('penjualan.edit',$buyyers->id) }}" class="btn btn-primary btn-block">Edit Profile</a></div>
+        <form action="{{ route('penjulan.update.income') }}" method="POST">
+          @csrf
+          <input type="text" hidden value="{{$buyyers->id}}" name="id">
+          <input type="text" hidden value="{{$get_profit_y}}" name="yincome">
+          <input type="text" hidden value="{{$get_profit_m}}" name="mincome">
+          <input type="text" hidden value="{{$get_profit_d}}" name="dincome">
+          <div class="text-center"><button type="submit" class="btn btn-success btn-block" style="margin-top: 10px">Confrim</button></div>
+        </form>
       </div>
       <!-- END PROFILE DETAIL -->
-    </div>
+  </div>
     <!-- END LEFT COLUMN -->
     <!-- RIGHT COLUMN -->
-    <div class="profile-right">
+    <div class="profile-right" style="width: 70%">
       <h4 class="heading">{{$buyyers->name}}</h4>
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="margin-bottom: 10px;">
@@ -117,8 +147,10 @@
                 <th>TANGGAL</th>
                 <th>TONASE</th>
                 <th>HARGA</th>
+                <th>Penjualan</th>
                 <th>NO NOTA</th>
                 <th>ACTION</th>
+                <th style="padding-left:0px">SELESAI</th>
               </tr>
             </thead>
             <tbody>
@@ -127,8 +159,9 @@
                 <td> <input class="form-check-input itemchecked" type="checkbox" name="item[{{ $item->id }}]" value="{{ $item->id }}"> </td>
               </form>
                   <td> {{ $item->date_time }} </td>
-                  <td> {{ $item->new_tonase }} </td>
+                  <td> {{ $item->new_tonase }} Kg</td>
                   <td> Rp. {{ number_format($item->price, 2, ',', '.') }} </td>
+                  <td> Rp. {{ number_format($item->income, 2, ',', '.') }} </td>
                   <td>
                     <form action="{{ route('print.note.buyer') }}" id="note" method="post">
                       @csrf
@@ -139,9 +172,21 @@
                       @endif
                     </form>
                   </td>
-                  <td>
-                    <a href="{{ route('barang.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>
+                  <td style="width: 150px">
+                    <a href="{{ route('dvitem.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>
                     <a href="{{ route('item.delete.pembelian',$item->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
+                  </td>
+                  <td style="padding-left:0px">
+                    @if($item->status == '0')
+                    <form action="{{route('barang.deliveryUpdate')}}" method="POST">
+                      @csrf
+                      <input type="hidden" name="buyer_id" value="{{ $buyyers->id  }}">
+                      <input type="hidden" name="item_id" value="{{ $item->id}}">
+                      <button type="submit" class="btn btn-primary" style="padding: 5px" ><i class="fas fa-check"></i></i></a>
+                    </form>
+                    @else
+                    <button href="" class="btn btn-primary" style="padding: 5px" disabled><i class="fas fa-check"></i></i></a>
+                    @endif
                   </td>
                 </tr>
               @endforeach
@@ -168,7 +213,7 @@
                 async : true,
                 success:function(result)
                 {
-                    let price = result.data[0].sell_price;
+                    let price = result.data[0].price;
                     let getPrice = $('#totalPrice').val()
                     let totalTonase = $('#totalTonase').val()
                     $('#getTotal').click(function() {

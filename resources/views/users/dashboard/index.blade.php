@@ -12,7 +12,43 @@
 @endif
 <div class="panel">
 	<div class="panel-heading">
-		<h3 class="panel-title">Weekly Overview</h3>
+		<h3 class="panel-title">Data Penjualan Harian</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fa fa-shopping-cart"></i></span>
+					<p>
+						<span class="number">Rp {{ number_format($dprofit->sum('income'), 2, ',', '.') }}</span>
+						<span class="title">Total Penjualan</span>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fas fa-poll"></i></i></span>
+					<p>
+						<span class="number">Rp {{ number_format($dprofit->sum('price'), 2, ',', '.') }}</span>
+						<span class="title">Total Pembelian</span>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fas fa-wallet"></i></i></span>
+					<p>
+						<span class="number">Rp {{ number_format($dprofit->sum('dincome'), 2, ',', '.') }}</span>
+						<span class="title">Keuntungan Harian</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel">
+	<div class="panel-heading">
+		<h3 class="panel-title">Data Penjualan Bulanan</h3>
 	</div>
 	<div class="panel-body">
 		@php
@@ -21,25 +57,37 @@
 			$penjualan = $price->sum('total_price');
 		@endphp
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="metric">
 					<span class="icon"><i class="fa fa-shopping-cart"></i></span>
 					<p>
-						<span class="number">Rp {{ number_format($priceyear->sum('total_price'), 2, ',', '.') }}</span>
-						<span class="title">Total Penjualan/Tahun</span>
+						<span class="number">Rp {{ number_format($mprofit->sum('price'), 2, ',', '.') }}</span>
+						<span class="title">Total Pembelian/Bulan</span>
 					</p>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="metric">
-					<span class="icon"><i class="fa fa-shopping-cart"></i></span>
+					<span class="icon"><i class="fas fa-poll"></i></i></span>
 					<p>
-						<span class="number">Rp {{ number_format($price->sum('total_price'), 2, ',', '.') }}</span>
+						<span class="number">Rp {{ number_format($mprofit->sum('income'), 2, ',', '.') }}</span>
 						<span class="title">Total Penjualan/bulan</span>
 					</p>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fas fa-wallet"></i></i></span>
+					<p>
+						<span class="number">Rp {{ number_format($mprofit->sum('mincome'), 2, ',', '.') }}</span>
+						<span class="title">Keuntungan</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		{{--  panel 2  --}}
+		<div class="row">
+			<div class="col-md-4">
 				<div class="metric">
 					<span class="icon"><i class="fas fa-credit-card"></i></span>
 					<p>
@@ -48,42 +96,37 @@
 					</p>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="metric">
-					<span class="icon"><i class="fas fa-money-bill-wave-alt"></i></span>
+					<span class="icon"><i class="fas fa-balance-scale"></i></span>
 					<p>
-						@if($price->sum('total_price') - $debt->sum('debt') <= 0)
-							<span class="number">Rp {{ number_format($debt->sum('debt')-$price->sum('total_price'), 2, ',', '.') }}</span>
-							<span class="title">Rugi</span>
-						@else
-							<span class="number">Rp {{ number_format($price->sum('total_price')  , 2,',', '.') }}</span>
-							<span class="title">Profit</span>
-						@endif
+						<span class="number">{{$mprofit->sum('tonase')}} Kg</span>
+						<span class="title">Tonase</span>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="metric">
+					<span class="icon"><i class="fas fa-truck"></i></span>
+					<p>
+						<span class="number">{{ $dvitems->sum('item_count') }}/{{ $deliveryItem->sum('item_count') }}</span>
+						<span class="title">Pengiriman Bulan ini</span>
 					</p>
 				</div>
 			</div>
 		</div>
-		{{--  panel 2  --}}
+		{{-- panel 3 --}}
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-12">
 				<div class="metric">
 					<span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
 					<p>
-						@if($zakat >= 85000000)
-							<span class="number">Rp {{ number_format($price->sum('total_price') - $debt->sum('debt'), 2, ',', '.') }}</span>
+						@if($yprofit->sum('yincome') >= $metals->price * 85)
+							<span class="number">Rp {{number_format($yprofit->sum('yincome') * 2.5/100, 2, ',', '.')}}</span>
 						@else
 							<span class="number">Rp 0,00</span>
 						@endif
 						<span class="title">Zakat</span>
-					</p>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="metric">
-					<span class="icon"><i class="fas fa-box"></i></span>
-					<p>
-						<span class="number">{{ $item->sum('item_count') }}</span>
-						<span class="title">Barang</span>
 					</p>
 				</div>
 			</div>
@@ -138,10 +181,10 @@
 							<th>Nisab</th>
 							<td>Rp. {{ number_format($metals->price * 85, 2, ',', '.') }}</td>
 						</tr>
-						@if($priceyear->sum('total_price') >= $metals->price * 85)
+						@if($yprofit->sum('yincome') >= $metals->price * 85)
 						<tr>
 							<th>Zakat</th>
-							<td>Rp.100.00.000,00</td>
+							<td>Rp {{number_format($yprofit->sum('yincome') * 2.5/100, 2, ',', '.')}}</td>
 						</tr>
 						@else
 						<tr>
@@ -156,63 +199,6 @@
 		</div>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Data Penjualan Pasar</h3>
-				<div class="right">
-					<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-				</div>
-			</div>
-			<div class="panel-body">
-				<canvas id="myChart"  class="ct-chart" height="100px"></canvas>
-			</div>
-		</div>
-	</div>
-</div>
 @endsection
 @section('footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
-<script>
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [{
-			label: 'Pasar 1',
-			data: [620, 380, 350, 320, 410, 450, 570, 400, 555,433, 750, 900],
-			backgroundColor: 'rgba(54, 162, 235, 1)',
-			borderColor:'rgba(54, 162, 235, 1)',
-			fill: false,
-		},
-		{
-            label: 'Pasar 2',
-            data: [200,900],
-            backgroundColor: 'rgba(255, 99, 132, 1)',
-			borderColor:'rgba(255, 99, 132, 1)',
-			data: [400, 555, 620, 750, 900,200, 380, 350, 320, 232, 450, 570],
-			fill: false,
-		},
-		{
-            label: 'Pasar 3',
-            data: [200,900],
-            backgroundColor: 'orange',
-			borderColor:'orange',
-			data: [ 900,200, 380, 350,400, 555, 620, 750,320, 232, 450, 570],
-			fill: false,
-		},
-		]
-    },
-    options: {
-        height: "300px",
-		showPoint: true,
-		axisX: {
-			showGrid: false
-		},
-		lineSmooth: false,
-    }
-});
-</script>
 @endsection

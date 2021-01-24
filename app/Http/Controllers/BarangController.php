@@ -162,9 +162,11 @@ class BarangController extends Controller
     $buyer = Buyer::findOrFail($request->get('buyer_id'));
     $item = $request->get('item');
     $dvitems = Dvitem::find($item);
+    $note_id = null;
     return view('users.barang.byprint', [
       'items' => $dvitems,
       'buyer' => $buyer,
+      'note_id' => $note_id
     ]);
   }
   public function delivery(Request $request)

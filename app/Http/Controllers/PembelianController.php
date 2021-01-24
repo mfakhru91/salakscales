@@ -23,7 +23,7 @@ class PembelianController extends Controller
       return $query->where('payment', '=', 'paid off');
     }))
       ->where('user_id', Auth::id())
-      ->get();
+      ->paginate(15);
     return view('users.pembelian.index', [
       'seller' => $seller,
     ]);

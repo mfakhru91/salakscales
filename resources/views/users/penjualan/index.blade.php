@@ -47,6 +47,7 @@
         </tbody>
         @endforeach
       </table>
+      {{ $buyers->links() }}
     </div>
   </div>
   <!-- Modal -->

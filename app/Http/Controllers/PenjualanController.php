@@ -17,7 +17,7 @@ class PenjualanController extends Controller
      */
     public function index()
     {
-        $buyers = Buyer::where('user_id', Auth::id())->get();
+        $buyers = Buyer::where('user_id', Auth::id())->paginate(15);
         return view('users.penjualan.index', [
             'buyers' => $buyers,
         ]);
@@ -86,17 +86,42 @@ class PenjualanController extends Controller
                 ->first();
         }
 
+        //get delivery item evry Year
+        $YearItem = Dvitem::where('user_id', Auth::id())
+            ->where('status', '1')
+            ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+            ->where('buyer_id', $id)
+            ->get();
+
+        //get delivery item evry month
+        $MonthItem = Dvitem::where('user_id', Auth::id())
+            ->where('status', '1')
+            ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
+            ->where('buyer_id', $id)
+            ->get();
+
+        //get delivery item evry day
+        $DayItem = Dvitem::where('user_id', Auth::id())
+            ->where('status', '1')
+            ->whereDay('date_time', Carbon::now('d')->timezone('Asia/Jakarta'))
+            ->where('buyer_id', $id)
+            ->get();
         // get buyyer id
         $buyyers = Buyer::where('id', $id)->first();
 
         // get buyyer delivered item
         $buyyerDevItem = Dvitem::where('user_id', $user)
             ->where('buyer_id', $id)
+            ->orderBy('status', 'asc')
             ->get();
+
         return view('users.penjualan.show', [
             'buyyers' => $buyyers,
             'user' => $user,
             'dvitem' => $data,
+            'monthItem' => $MonthItem,
+            'yearItem' => $YearItem,
+            'dayItem' => $DayItem,
             'buyyerItem' => $buyyerDevItem
         ]);
     }
@@ -126,18 +151,26 @@ class PenjualanController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|min:5',
-            'market'=> 'required',
+            'market' => 'required',
             'address' => 'required',
-            'no_telp' => 'required',
-          ]);
-          $update = Buyer::findOrFail($id);
-          $update->user_id = Auth::user()->id;
-          $update->name = $request->get('name');
-          $update->market = $request->get('market');
-          $update->address = $request->get('address');
-          $update->no_telp = $request->get('no_telp');
-          $update->save();
-          return redirect()->route('penjualan.show', $id)->with('status', 'data pembeli berhasil diperbarui');
+            'no_telp' => 'required|numeric',
+            'tools' => 'nullable|numeric',
+            'packing' => 'nullable|numeric',
+            'shipping_charges' => 'numeric',
+            'selling_price' => 'numeric',
+        ]);
+        $update = Buyer::findOrFail($id);
+        $update->user_id = Auth::user()->id;
+        $update->name = $request->get('name');
+        $update->market = $request->get('market');
+        $update->address = $request->get('address');
+        $update->no_telp = $request->get('no_telp');
+        $update->tools = $request->get('tools');
+        $update->packing = $request->get('packing');
+        $update->shipping_charges = $request->get('shipping_charges');
+        $update->selling_price = $request->get('selling_price');
+        $update->save();
+        return redirect()->route('penjualan.show', $id)->with('status', 'data pembeli berhasil diperbarui');
     }
 
     /**
@@ -170,5 +203,15 @@ class PenjualanController extends Controller
         $addNewItem->price = $request->get('price');
         $addNewItem->save();
         return redirect()->route('penjualan.show', $request->get('buyyer_id'))->with('status', 'berhasil menambahkan pengiriman baranh');
+    }
+    public function income(Request $request)
+    {
+        $buyer_id = $request->get('id');
+        $buyer = Buyer::findOrFail($buyer_id);
+        $buyer->yincome = $request->get('yincome');
+        $buyer->mincome = $request->get('mincome');
+        $buyer->dincome = $request->get('dincome');
+        $buyer->save();
+        return redirect()->route('penjualan.show', $buyer_id)->with('status', 'berhasil memperbarui keuntungan bulan ini');
     }
 }

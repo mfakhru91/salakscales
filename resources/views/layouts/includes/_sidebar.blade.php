@@ -13,7 +13,7 @@
           </div>
         </li>
         <li><a href="{{ route('barang.index') }}" class="{{ Request::routeIs('barang.index')? 'active' : '' }}"><i class="lnr lnr-database"></i><span>Barang</span></a></li>
-        <li><a href="{{ route('pembelian.index') }}" class=""><i class="lnr lnr-book"></i><span>Pembukuan</span></a></li>
+        <li><a href="{{ route('laporan.index') }}" class="{{ Request::routeIs('laporan.index')? 'active' : '' }}"><i class="lnr lnr-book"></i><span>Laporan</span></a></li>
         <li><a href="{{ route('pembelian.index') }}" class=""><i class="lnr lnr-calendar-full"></i><span>Kalender</span></a></li>
         <li><a href="{{ route('setting.index') }}" class=""><i class="lnr lnr-cog"></i> <span>Setting</span></a></li>
       </ul>

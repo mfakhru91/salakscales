@@ -16,15 +16,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="price" class="col-sm-2 col-form-label">Harga Pasar</label>
+                <label for="price" class="col-sm-2 col-form-label">Harga Beli</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="price" name="price" placeholder="Harga Pasar" value="{{$settings->price}}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="price" class="col-sm-2 col-form-label">Harga Pasar</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="shellPrice" name="sellprice" placeholder="Harga Pasar" value="{{$settings->sell_price}}">
                 </div>
             </div>
             <div class="form-group row">

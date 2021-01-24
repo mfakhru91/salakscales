@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Setting;
-use App\User;
+use App\Dvitem;
+use App\Buyer;
 use Auth;
 
-class SettingController extends Controller
+class DvitemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,20 +16,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $getUser = Auth::user();
-        $getSetting = Setting::where('user_id', Auth::id())->first();
-        $Setting = json_decode($getSetting);
-        if (empty($Setting)) {
-            $newSetting = new Setting;
-            $newSetting->user_id = Auth::id();
-            $newSetting->save();
-            return view('users.setting.index');
-        } else {
-            return view('users.setting.index', [
-                'settings' => $getSetting,
-                'user' => $getUser,
-            ]);
-        }
+        //
     }
 
     /**
@@ -72,7 +59,14 @@ class SettingController extends Controller
      */
     public function edit($id)
     {
-        //
+        $userId = Auth::id();
+        $dvitem = Dvitem::findOrFail($id);
+        $buyer = Buyer::where('id', $dvitem->buyer_Id)->first();
+        return view('users.dvbarang.edit', [
+            'buyer' => $buyer,
+            'item' => $dvitem,
+            'user' => $userId
+        ]);
     }
 
     /**
@@ -84,16 +78,16 @@ class SettingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updateUser = User::findOrFail($id);
-        $updateUser->name = $request->get('username');
-        $updateUser->save();
-        $Setting = Setting::where('user_id', $id)
-            ->update([
-                'user_id' => Auth::id(),
-                'price' => $request->get('price'),
-                'tools_id' => $request->get('tools'),
-            ]);
-        return redirect()->route('setting.index');
+        $this->validate($request, [
+            'status' => 'required',
+        ]);
+        $dvitem = Dvitem::findOrFail($id);
+        $dvitem->price = $request->get('price');
+        $dvitem->income = $request->get('income');
+        $dvitem->status = $request->get('status');
+        $dvitem->save();
+        $buyerId = $request->get('buyerId');
+        return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
     }
 
     /**
@@ -105,5 +99,18 @@ class SettingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function deliveryUpdate(Request $request){
+        $dvitem = Dvitem::findOrFail($request->get('item_id'));
+        $buyerId = $request->get('buyer_id');
+        if($dvitem->income == null){
+            return redirect()->route('penjualan.show', $buyerId)->with('error', 'harap mengisi penjualan terlebh dahulu');
+        }else{
+            $dvitem->status = '1';
+        $dvitem->save();
+        return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
+        }
+
     }
 }

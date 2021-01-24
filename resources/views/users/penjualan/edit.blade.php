@@ -39,9 +39,56 @@
         @if($errors->has('no_telp'))
           <span class="help-block" >{{ $errors->first('no_telp') }}</span>
         @endif
+        <hr>
+        <h4>AKOMODASI</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="selling_price">Harga Jual</label>
+            <div class="input-group {{ $errors->has('selling_price')? 'has-error':'' }} ">
+              <span class="input-group-addon">Rp</span>
+              <input type="number" class="form-control" name="selling_price" value="{{ $buyer->selling_price }}" placeholder="harga jual">
+            </div>
+            @if($errors->has('selling_price'))
+              <span class="help-block" >{{ $errors->first('selling_price') }}</span>
+            @endif
+          </div>
+          <div class="col-md-6">
+            <label for="no_telp">Pengepakan</label>
+            <div class="input-group {{ $errors->has('packing')? 'has-error':'' }} ">
+              <span class="input-group-addon">Rp</span>
+              <input type="number" class="form-control" name="packing" value="{{ $buyer->packing }}" placeholder="Pengepakan">
+            </div>
+            @if($errors->has('packing'))
+              <span class="help-block" >{{ $errors->first('packing') }}</span>
+            @endif
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="tools">Alat</label>
+            <div class="input-group {{ $errors->has('tools')? 'has-error':'' }} ">
+              <span class="input-group-addon">Rp</span>
+              <input type="number" class="form-control" name="tools" value="{{ $buyer->tools }}" placeholder="Alat">
+            </div>
+            @if($errors->has('tools'))
+              <span class="help-block" >{{ $errors->first('tools') }}</span>
+            @endif
+          </div>
+          <div class="col-md-6">
+            <label for="shipping_charges">Ongkos Kirim</label>
+            <div class="input-group {{ $errors->has('shipping_charges')? 'has-error':'' }} ">
+              <span class="input-group-addon">Rp</span>
+              <input type="number" class="form-control" name="shipping_charges" value="{{ $buyer->shipping_charges }}" placeholder="Ongkos Kirim">
+            </div>
+            @if($errors->has('shipping_charges'))
+              <span class="help-block" >{{ $errors->first('shipping_charges') }}</span>
+            @endif
+          </div>
+        </div>
     </div>
     <div class="panel-footer">
-      <button type="submit" class="btn btn-primary">Tambah +</button>
+      <button type="submit" class="btn btn-primary btn-block">Edit</button>
     </form>
     </div>
   </div>

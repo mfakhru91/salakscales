@@ -17,6 +17,15 @@
               <td style="width: 30px;">:</td>
               <td>{{ now()->format('d M Y') }}</td>
             </tr>
+            @if($note_id == null)
+
+            @else
+            <tr>
+              <td>No</td>
+              <td>:</td>
+              <td>{{$note_id}}</td>
+            </tr>
+            @endif
             <tr>
               <td>Nama</td>
               <td>:</td>
@@ -45,6 +54,7 @@
             <th>Tanggal</th>
             <th>Tonase</th>
             <th>Price</th>
+            <th>Penjualan</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +63,7 @@
             <td>{{ $item->date($item->created_at) }}</td>
             <td>{{ $item->new_tonase }} Kg</td>
             <td>Rp.{{ number_format($item->price, 2, ',', '.') }}</td>
+            <td>Rp.{{ number_format($item->income, 2, ',', '.') }}</td>
           </tr>
           @endforeach
           <tr >
@@ -61,6 +72,7 @@
             </td>
             <td> {{ $items->sum('new_tonase') }} Kg</td>
             <td>Rp.{{ number_format($items->sum('price') ,2 ,',', '.')}}</td>
+            <td>Rp.{{ number_format($items->sum('income') ,2 ,',', '.')}}</td>
           </tr>
         </tbody>
       </table>
@@ -74,7 +86,7 @@
           </button></div>
           @endif
         <div class="col-md-1">
-          <form action="{{ route('note.buyer.store') }}" method="post">
+          <form action="{{route('note.buyer.store')}}" method="POST">
             @csrf
             <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
             @foreach($items as $item)
