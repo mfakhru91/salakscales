@@ -75,8 +75,8 @@
             <th> <input class="form-check-input" type="checkbox" id="checkall" value="option2"> </th>
 						<th>NAMA PENJUAL</th>
 						<th>TONASE</th>
-						<th>PRICE</th>
-						<th>PAYMENT</th>
+						<th>HARGA</th>
+						<th>PEMBAYARAN</th>
 						<th>NO NOTA</th>
             <th>STATUS</th>
 						<th>ACTION</th>
@@ -91,7 +91,13 @@
               <td><a href="{{ route('pembelian.show',$seller->id) }}" class="text-info">{{ $seller->name}}</a></td>
               <td>{{ $item->tonase }}</td>
               <td>Rp. {{ number_format($item->price, 2, ',', '.') }}</td>
-              <td>{{ $item->payment }}</td>
+              <td>
+                @if($item->payment == 'debt')
+                  Hutang
+                @else
+                  Lunas
+                @endif
+              </td>
               <td>
                 <form action="{{ route('print.note') }}" id="note" method="post">
                   @csrf
@@ -130,8 +136,8 @@
 					<tr>
 						<th>NAMA PENJUAL</th>
 						<th>TONASE</th>
-						<th>PRICE</th>
-						<th>PAYMENT</th>
+						<th>HARGA</th>
+						<th>PEMBAYARAN</th>
 						<th>NO NOTA</th>
             <th>STATUS</th>
 						<th>ACTION</th>
@@ -144,7 +150,13 @@
               <td><a href="{{ route('pembelian.show',$seller->id) }}" class="text-info">{{ $seller->name}}</a></td>
               <td>{{ $item->tonase }}</td>
               <td>Rp. {{ number_format($item->price, 2, ',', '.') }}</td>
-              <td>{{ $item->payment }}</td>
+              <td>
+                @if($item->payment == 'debt')
+                  Hutang
+                @else
+                  Lunas
+                @endif
+              </td>
               <td>
                 <form action="{{ route('print.note') }}" id="note" method="post">
                   @csrf
@@ -163,6 +175,7 @@
               @endif
               </td>
               <td>
+                <a href="{{ route('barang.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>
                 <a href="{{ route('item.delete',$item->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
               </td>
             </tr>

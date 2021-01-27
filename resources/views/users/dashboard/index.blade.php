@@ -20,15 +20,6 @@
 				<div class="metric">
 					<span class="icon"><i class="fa fa-shopping-cart"></i></span>
 					<p>
-						<span class="number">Rp {{ number_format($dprofit->sum('income'), 2, ',', '.') }}</span>
-						<span class="title">Total Penjualan</span>
-					</p>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="metric">
-					<span class="icon"><i class="fas fa-poll"></i></i></span>
-					<p>
 						<span class="number">Rp {{ number_format($dprofit->sum('price'), 2, ',', '.') }}</span>
 						<span class="title">Total Pembelian</span>
 					</p>
@@ -36,9 +27,32 @@
 			</div>
 			<div class="col-md-4">
 				<div class="metric">
+					<span class="icon"><i class="fas fa-poll"></i></i></span>
+					<p>
+						<span class="number">Rp {{ number_format($dprofit->sum('income'), 2, ',', '.') }}</span>
+						<span class="title">Total Penjualan</span>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="metric bg-info">
 					<span class="icon"><i class="fas fa-wallet"></i></i></span>
 					<p>
-						<span class="number">Rp {{ number_format($dprofit->sum('dincome'), 2, ',', '.') }}</span>
+						@php
+							$dstates = [];
+						@endphp
+						@foreach($dprofit as $dp)
+							@php
+								$akomodasi = $dp->tools + $dp->packing + $dp->shipping_charges;
+								$total_akomodasi = $akomodasi * $dp->tonase;
+								$sum_income = $dp->income - $dp->price - $total_akomodasi;
+								array_push($dstates, $sum_income);
+							@endphp
+						@endforeach
+						@php
+							 $daily_profit = array_sum($dstates);
+						@endphp
+						<span class="number">Rp {{ number_format($daily_profit, 2, ',', '.') }}</span>
 						<span class="title">Keuntungan Harian</span>
 					</p>
 				</div>
@@ -47,6 +61,20 @@
 	</div>
 </div>
 <div class="panel">
+	@php
+		$mstates = [];
+	@endphp
+	@foreach($mprofit as $mp)
+		@php
+			$akomodasi = $mp->tools + $mp->packing + $mp->shipping_charges;
+			$total_akomodasi = $akomodasi * $mp->tonase;
+			$sum_income = $mp->income - $mp->price - $total_akomodasi;
+			array_push($mstates, $sum_income);
+		@endphp
+	@endforeach
+	@php
+			$monthly_profit = array_sum($mstates);
+	@endphp
 	<div class="panel-heading">
 		<h3 class="panel-title">Data Penjualan Bulanan</h3>
 	</div>
@@ -76,10 +104,10 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="metric">
+				<div class="metric bg-info">
 					<span class="icon"><i class="fas fa-wallet"></i></i></span>
 					<p>
-						<span class="number">Rp {{ number_format($mprofit->sum('mincome'), 2, ',', '.') }}</span>
+						<span class="number">Rp {{ number_format($monthly_profit, 2, ',', '.') }}</span>
 						<span class="title">Keuntungan</span>
 					</p>
 				</div>
@@ -109,7 +137,7 @@
 				<div class="metric">
 					<span class="icon"><i class="fas fa-truck"></i></span>
 					<p>
-						<span class="number">{{ $dvitems->sum('item_count') }}/{{ $deliveryItem->sum('item_count') }}</span>
+						<span class="number">{{$deliveryItem->sum('dvitem') - $dvitems->sum('dvcounting') }}/{{ $deliveryItem->sum('dvitem') }}</span>
 						<span class="title">Pengiriman Bulan ini</span>
 					</p>
 				</div>
@@ -121,8 +149,8 @@
 				<div class="metric">
 					<span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
 					<p>
-						@if($yprofit->sum('yincome') >= $metals->price * 85)
-							<span class="number">Rp {{number_format($yprofit->sum('yincome') * 2.5/100, 2, ',', '.')}}</span>
+						@if($yprofit->sum('yincome') >= $goldprice * 85)
+							<span class="number">Rp {{number_format($goldprice->sum('yincome') * 2.5/100, 2, ',', '.')}}</span>
 						@else
 							<span class="number">Rp 0,00</span>
 						@endif
@@ -143,17 +171,17 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<form action="{{route('metal.store')}}" method="POST" class="form-inline">
-					@csrf
-					<div class="form-group mx-sm-3 mr-2">
-						<input type="text" class="form-control" value="Emas" disabled style="width: 60px">
-						<label for="inputPassword2" class="sr-only">Data Emas</label>
-						<input type="number" class="form-control" id="inputPassword2" placeholder="Harga" name="price">
-						<small></small>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="metric bg-warning">
+							<span class="icon"><i class="fas fa-ring"></i></span>
+							<p>
+								<span class="number">Rp {{ number_format($goldprice, 2, ',', '.') }}</span>
+								<span class="title">Harga emas hari ini</span>
+							</p>
+						</div>
 					</div>
-					<button type="submit" class="btn btn-primary mb-2 mr-2">kirim</button>
-				</form>
-				<small>* Masukan <a href="https://www.indogold.id/harga-emas-hari-ini"> <b>penjualan emas/perak</b> </a> terbaru untuk mendapatkan nishab</small>
+				</div>
 				<div class="print" style="margin-top:20px">
 					<table class="table table-bordered">
 						<tr>
@@ -163,25 +191,15 @@
 								</div>
 							</td>
 						</tr>
-						@if(empty($metals))
 						<tr>
 							<th>Harga Emas</th>
-							<td>Rp. 0</td>
+							<td>Rp. {{ number_format($goldprice, 2, ',', '.') }}</td>
 						</tr>
 						<tr>
 							<th>Nisab</th>
-							<td>Rp. 0</td>
+							<td>Rp. {{ number_format($goldprice * 85, 2, ',', '.') }}</td>
 						</tr>
-						@else
-						<tr>
-							<th>Harga {{ $metals->type }}</th>
-							<td>Rp. {{ number_format($metals->price, 2, ',', '.') }}</td>
-						</tr>
-						<tr>
-							<th>Nisab</th>
-							<td>Rp. {{ number_format($metals->price * 85, 2, ',', '.') }}</td>
-						</tr>
-						@if($yprofit->sum('yincome') >= $metals->price * 85)
+						@if($yprofit->sum('yincome') >= $goldprice * 85)
 						<tr>
 							<th>Zakat</th>
 							<td>Rp {{number_format($yprofit->sum('yincome') * 2.5/100, 2, ',', '.')}}</td>
@@ -192,12 +210,15 @@
 							<td>Rp.0</td>
 						</tr>
 						@endif
-						@endif
 					</table>
 				</div>
 			</div>
 		</div>
 	</div>
+	@foreach($dayItem as $a)
+	@php
+	@endphp
+	@endforeach
 </div>
 @endsection
 @section('footer')

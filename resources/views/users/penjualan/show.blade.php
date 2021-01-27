@@ -56,18 +56,10 @@
              $get_profit_m = $monthItem->sum('income') - $monthItem->sum('price') - ($buyyers->tools * $monthItem->sum('new_tonase')) -  ($buyyers->packing * $monthItem->sum('new_tonase')) - ($buyyers->shipping_charges * $monthItem->sum('new_tonase'));
              $get_profit_d = $dayItem->sum('income') - $dayItem->sum('price') - ($buyyers->tools * $dayItem->sum('new_tonase')) -  ($buyyers->packing * $dayItem->sum('new_tonase')) - ($buyyers->shipping_charges * $dayItem->sum('new_tonase'));
             @endphp
-            <li><b>Keuntungan<span>Rp. {{ number_format($get_profit_m, 2, ',', '.') }}</span></b></li>
+            <li><b>Keuntungan<span>Rp. {{ number_format($get_profit_y, 2, ',', '.') }}</span></b></li>
           </ul>
         </div>
         <div class="text-center"><a href="{{ route('penjualan.edit',$buyyers->id) }}" class="btn btn-primary btn-block">Edit Profile</a></div>
-        <form action="{{ route('penjulan.update.income') }}" method="POST">
-          @csrf
-          <input type="text" hidden value="{{$buyyers->id}}" name="id">
-          <input type="text" hidden value="{{$get_profit_y}}" name="yincome">
-          <input type="text" hidden value="{{$get_profit_m}}" name="mincome">
-          <input type="text" hidden value="{{$get_profit_d}}" name="dincome">
-          <div class="text-center"><button type="submit" class="btn btn-success btn-block" style="margin-top: 10px">Confrim</button></div>
-        </form>
       </div>
       <!-- END PROFILE DETAIL -->
   </div>
@@ -198,7 +190,6 @@
     <!-- END RIGHT COLUMN -->
   </div>
 </div>
-
 @endsection
 @section('footer')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>

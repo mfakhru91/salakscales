@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Goutte\Client;
+
 use Carbon\Carbon;
 use App\Seller;
 use App\Metal;
@@ -20,8 +22,19 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $states = [];
     public function index()
     {
+        // gold scraping
+        $client = new Client();
+        $page = $client->request('GET', 'https://www.logammulia.com/id');
+
+        $page->filter('.current')->each(function ($item) {
+            array_push($this->states, $item->text());
+        });
+        preg_match_all('!\d+!', $this->states[0], $matches);
+
+        $goldprice = $matches[0][0] . $matches[0][1];
         // get data date from asoia jakarta
         $date = Carbon::now('Asia/Jakarta')->timezone('Asia/Jakarta');
 
@@ -45,17 +58,10 @@ class DashboardController extends Controller
             ->get();
 
         //get delivered item
-        $dvitems = Buyer::withCount(array('dvitem as item_count' => function ($query) {
-            $query->where('status', '1')
-                ->whereDay('created_at', Carbon::now('d')->timezone('Asia/Jakarta'));
-        }))
-            ->where('user_id', Auth::id())
-            ->get();
+        $dvitems = Buyer::withCount('dvitem_delivery as dvcounting')->where('user_id', Auth::id())->get();
 
         // all items
-        $deliveryItem = Buyer::withCount(array('dvitem as item_count' => function ($query) {
-            $query->whereDay('created_at', Carbon::now('d')->timezone('Asia/Jakarta'));
-        }))
+        $deliveryItem = Buyer::withCount('dvitem as dvitem')
             ->where('user_id', Auth::id())
             ->get();
 
@@ -131,13 +137,16 @@ class DashboardController extends Controller
             ->where('status', '1')
             ->get();
 
+        // preg_match_all('!\d+!', $string, $matches);
+        // print_r($matches);
+
         $weeklydata = DB::table('buyers')
             ->join('dvitems', 'buyers.id', '=', 'dvitems.buyer_id')
             ->whereBetween('dvitems.date_time', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
             ->get();
 
         // get data METAL
-        $metal = Metal::where('user_id', Auth::id())->first();
+        // $metal = Metal::where('user_id', Auth::id())->first();
         return view('users.dashboard.index', [
             'yprofit' => $yprofit,
             'price' => $seller,
@@ -146,9 +155,9 @@ class DashboardController extends Controller
             'debt' => $debt,
             'mprofit' => $mprofit,
             'dprofit' => $dprofit,
-            'metals' => $metal,
             'weeklydata' => $weeklydata,
-            'dayItem' => $dayItem
+            'dayItem' => $dayItem,
+            'goldprice' => $goldprice,
         ]);
     }
 
