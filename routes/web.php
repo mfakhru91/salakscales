@@ -51,8 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
 	// delivery item
 	Route::post('/dvitem/delivery/deliveryUpdate', 'DvitemController@deliveryUpdate')->name('barang.deliveryUpdate');
 
-	//reporting
-	Route::get('/cari/laporan/bulan','ReportingController@searchMont')->name('reporting.month.search');
+	// bookkeeping
+	Route::get('/bookkeeping/{id}/delete', 'BookkeepingController@delete')->name('bookkeeping.delete');
 
 	// resource controller routing
 	Route::resource('dashboard', 'DashboardController');
@@ -64,5 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('note', 'NoteController');
 	Route::resource('setting', 'SettingController');
 	Route::resource('laporan', 'ReportingController');
+	Route::resource('bookkeeping', 'BookkeepingController');
+
 
 });
