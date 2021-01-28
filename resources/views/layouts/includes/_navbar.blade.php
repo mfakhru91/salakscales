@@ -8,7 +8,7 @@
     </div>
     <div id="navbar-menu">
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+        {{--  <li class="dropdown">
           <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
             <i class="lnr lnr-alarm"></i>
             <span class="badge bg-danger">5</span>
@@ -21,21 +21,11 @@
             <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
             <li><a href="#" class="more">See all notifications</a></li>
           </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-question-circle"></i> <span>Help</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Basic Use</a></li>
-            <li><a href="#">Working With Data</a></li>
-            <li><a href="#">Security</a></li>
-            <li><a href="#">Troubleshooting</a></li>
-          </ul>
-        </li>
+        </li>  --}}
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="public/klorofil/assets/img/user.png" class="img-circle" alt="Avatar"> <span>{{Auth::user()->name}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
           <ul class="dropdown-menu">
-            <li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
-            <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
+            {{--  <li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>  --}}
             <li><a href="{{route('setting.index')}}"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
             <li>
               <a class="dropdown-item" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="lnr lnr-exit"></i> <span>Logout</span></a>

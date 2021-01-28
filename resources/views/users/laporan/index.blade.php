@@ -6,7 +6,12 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 @endsection
 @section('content')
-
+@if(session('status'))
+  <div class="alert alert-warning alert-dismissible" role="alert">
+     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+     <i class="fa fa-check-circle"></i> {{session('status')}}
+  </div>
+@endif
 <div class="panel">
     <div class="panel-heading">
         <h3 class="panel-title">Laporan</h3>
@@ -310,7 +315,7 @@
                     <td>{{$item->price}}</td>
                     <td>{{$item->unit * $item->price}}</td>
                     <td>
-                        {{--  <a href="{{ route('barang.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>  --}}
+                        <a href="{{ route('bookkeeping.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>
                         <a href="{{ route('bookkeeping.delete',$item->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
                     </td>
                 </tr>
