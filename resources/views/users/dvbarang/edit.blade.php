@@ -26,14 +26,6 @@
                   <span class="input-group-addon">Rp</span>
                   <input type="text" class="form-control" name="income" id="income" value="@if($item->income == null) 0 @else {{$item->income}} @endif">
                 </div>
-                <div class="form-group">
-                  <label for="payment">Pembayaran</label>
-                  <select class="form-control" name="status">
-                    <option value="" >Pembayaran</option>
-                    <option value="0" @if($item->status == '0')selected @endif >Hutang</option>
-                    <option value="1" @if($item->status== '1')selected @endif>Lunas</option>
-                  </select>
-                </div>
                 <br>
                 <button type=" submit " class="btn btn-primary">Save</button>
 			</form>

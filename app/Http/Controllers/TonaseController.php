@@ -13,9 +13,10 @@ class TonaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tonase = Tonase::orderBy('id','DESC')->take(1)->get();
+        $tools_id = $request->get('tools_id');
+        $tonase = Tonase::orderBy('id','DESC')->take(1)->where('tools_id',$tools_id)->get();
         return TonaseResource::collection($tonase);
 
     }

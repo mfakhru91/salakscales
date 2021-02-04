@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\URL;
 use App\Seller;
 use App\Item;
 use App\Note;
+use App\JournalLedger;
+use Carbon\Carbon;
 use Auth;
 
 class PembelianController extends Controller
@@ -137,6 +139,7 @@ class PembelianController extends Controller
   }
   public function addItems(Request $request)
   {
+    $seller_id = $request->get('seller_id');
     $this->validate($request, [
       'tonase' => 'required|integer',
       'price' => 'required',
@@ -149,7 +152,18 @@ class PembelianController extends Controller
     $item->payment = $request->get('payment');
     $item->status = 'process';
     $item->save();
-    $seller_id = $request->get('seller_id');
+
+    $sellers = Seller::findOrFail($seller_id);
+
+    $JournalLedger = new JournalLedger;
+    $JournalLedger->user_id = Auth::id();
+    $JournalLedger->description = "Pembelian Salak Ke " . $sellers->name;
+    $JournalLedger->status = "kredit";
+    $JournalLedger->nominal = $request->get('price');
+    $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+    $JournalLedger->save();
+
+
     return redirect()->route('pembelian.show', $seller_id)->with('status', 'Barang berhasil ditambah');
   }
   public function deleteItem($id)

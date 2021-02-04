@@ -29,6 +29,8 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block">Update</button>
         </form>
+        <br>
+        <small>*<b>Harap di perhatikan!, agar menyelesaikan semua transaksi sebelum merubah data <i>Harga Beli</i> karna akan mempengaruhi semua perhitungan</b> </small>
     </div>
 </div>
 @endsection

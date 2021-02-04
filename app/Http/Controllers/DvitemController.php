@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Dvitem;
 use App\Buyer;
+use App\JournalLedger;
+use Carbon\Carbon;
 use Auth;
 
 class DvitemController extends Controller
@@ -78,13 +80,9 @@ class DvitemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'status' => 'required',
-        ]);
         $dvitem = Dvitem::findOrFail($id);
         $dvitem->price = $request->get('price');
         $dvitem->income = $request->get('income');
-        $dvitem->status = $request->get('status');
         $dvitem->save();
         $buyerId = $request->get('buyerId');
         return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
@@ -101,16 +99,26 @@ class DvitemController extends Controller
         //
     }
 
-    public function deliveryUpdate(Request $request){
-        $dvitem = Dvitem::findOrFail($request->get('item_id'));
-        $buyerId = $request->get('buyer_id');
-        if($dvitem->income == null){
-            return redirect()->route('penjualan.show', $buyerId)->with('error', 'harap mengisi penjualan terlebh dahulu');
-        }else{
-            $dvitem->status = '1';
-        $dvitem->save();
-        return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
-        }
+    public function deliveryUpdate(Request $request)
+    {
 
+        $dvitem = Dvitem::findOrFail($request->get('item_id'));
+        $buyer_id = $dvitem->buyer_Id;
+        $buyer = Buyer::findOrFail($buyer_id);
+        $buyerId = $request->get('buyer_id');
+        if ($dvitem->income == null || $dvitem->income == 0) {
+            return redirect()->route('penjualan.show', $buyerId)->with('error', 'harap mengisi penjualan terlebh dahulu');
+        } else {
+            $JournalLedger = new JournalLedger;
+            $JournalLedger->user_id = Auth::id();
+            $JournalLedger->description = "Penjualan Ke Pasar " . $buyer->market;
+            $JournalLedger->status = "debet";
+            $JournalLedger->nominal = $dvitem->income;
+            $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+            $JournalLedger->save();
+            $dvitem->status = '1';
+            $dvitem->save();
+            return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
+        }
     }
 }

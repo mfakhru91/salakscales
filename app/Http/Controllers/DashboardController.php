@@ -9,7 +9,7 @@ use Goutte\Client;
 
 use Carbon\Carbon;
 use App\Seller;
-use App\Metal;
+use App\Bookkeeping_journal;
 use App\Buyer;
 use App\Dvitem;
 use Auth;
@@ -35,8 +35,6 @@ class DashboardController extends Controller
         preg_match_all('!\d+!', $this->states[0], $matches);
 
         $goldprice = $matches[0][0] . $matches[0][1];
-        // get data date from asoia jakarta
-        $date = Carbon::now('Asia/Jakarta')->timezone('Asia/Jakarta');
 
         // get data seller with item price count in this month
         $seller = Seller::withCount(array('item as total_price' => function ($query) {
@@ -145,8 +143,12 @@ class DashboardController extends Controller
             ->whereBetween('dvitems.date_time', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
             ->get();
 
-        // get data METAL
-        // $metal = Metal::where('user_id', Auth::id())->first();
+        // get additional item in year
+        $items =  Bookkeeping_journal::where('user_id', Auth::id())
+                ->whereYear('date', Carbon::now('y')->timezone('Asia/Jakarta'))
+                ->orderBy('date', 'ASC')
+                ->get();
+
         return view('users.dashboard.index', [
             'yprofit' => $yprofit,
             'price' => $seller,
@@ -158,6 +160,7 @@ class DashboardController extends Controller
             'weeklydata' => $weeklydata,
             'dayItem' => $dayItem,
             'goldprice' => $goldprice,
+            'items' => $items,
         ]);
     }
 

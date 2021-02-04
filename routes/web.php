@@ -52,7 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/dvitem/delivery/deliveryUpdate', 'DvitemController@deliveryUpdate')->name('barang.deliveryUpdate');
 
 	// bookkeeping
-	Route::get('/bookkeeping/{id}/delete', 'BookkeepingController@delete')->name('bookkeeping.delete');
+	Route::get('/additional-item/{id}/delete', 'AdditionalItemController@delete')->name('additional-item.delete');
+	Route::get('/additional-item/export', 'AdditionalItemController@export')->name('additional-item.export');
 
 	// resource controller routing
 	Route::resource('dashboard', 'DashboardController');
@@ -63,8 +64,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('barang', 'BarangController');
 	Route::resource('note', 'NoteController');
 	Route::resource('setting', 'SettingController');
-	Route::resource('laporan', 'ReportingController');
-	Route::resource('bookkeeping', 'BookkeepingController');
+	Route::resource('jurnal-ledger', 'JournalLedgerController');
+	Route::resource('jurnal-pembelian', 'JurnalPembelianController');
+	Route::resource('jurnal-penjualan', 'JurnalPenjualanController');
+	Route::resource('additional-item', 'AdditionalItemController');
 
 
 });

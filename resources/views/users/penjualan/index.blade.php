@@ -38,7 +38,7 @@
           <td>{{ $by->name }}</td>
           <td>{{ $by->address }}</td>
           <td>{{ $by->no_telp }}</td>
-          <td>null</td>
+          <td>{{ $by->count_dvitem->count() }}</td>
           <td>
             <a href="{{ route('penjualan.edit',$by->id) }}" class="btn btn-warning"><span class="lnr lnr-pencil"></span></a>
             <a href="{{ route('penjualan.delete',$by->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>

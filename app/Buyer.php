@@ -17,6 +17,11 @@ class Buyer extends Model
     return $this->dvitem()->where('status', '0')->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'));
   }
 
+  public function count_dvitem()
+  {
+    return $this->dvitem()->where('status', '1');
+  }
+
   public function item()
   {
     return $this->hasMany('App\Dvitem');

@@ -9,6 +9,7 @@ use App\Item;
 use App\Seller;
 use App\Dvitem;
 use App\Buyer;
+use App\JournalLedger;
 use Auth;
 
 class BarangController extends Controller
@@ -62,6 +63,8 @@ class BarangController extends Controller
    */
   public function store(Request $request)
   {
+    $seller_id = $request->get('seller_id');
+
     $this->validate($request, [
       'tonase' => 'required|integer',
       'price' => 'required',
@@ -74,7 +77,17 @@ class BarangController extends Controller
     $item->payment = $request->get('payment');
     $item->status = 'process';
     $item->save();
-    $seller_id = $request->get('seller_id');
+
+    $sellers = Seller::findOrFail($seller_id);
+
+    $JournalLedger = new JournalLedger;
+    $JournalLedger->user_id = Auth::id();
+    $JournalLedger->description = "Pembelian Salak Ke " . $sellers->name;
+    $JournalLedger->status = "kredit";
+    $JournalLedger->nominal = $request->get('price');
+    $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+    $JournalLedger->save();
+
     return redirect()->route('barang.index', $seller_id)->with('status', 'Barang berhasil ditambah');
   }
 

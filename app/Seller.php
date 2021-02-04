@@ -11,4 +11,9 @@ class Seller extends Model
     {
       return $this->hasMany('App\Item');
     }
+
+    public function delivered_item()
+    {
+      return $this->item()->where('delivery', '1');
+    }
 }

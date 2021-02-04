@@ -14,10 +14,17 @@ class Item extends Model
     {
       return Carbon::createFromFormat('Y-m-d H:i:s', $value )->format('d M Y');
     }
+
+    public function date_reporting($value)
+    {
+      return Carbon::createFromFormat('Y-m-d H:i:s', $value )->format('d-m-Y');
+    }
+
     public function seller()
     {
       return $this->belongsTo('App\Saller');
     }
+
     public function note()
     {
       return $this->belongsTo('App\Note');

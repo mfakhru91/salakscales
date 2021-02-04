@@ -4,11 +4,36 @@
 <link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">
 @endsection
 @section('content')
-@if(session('status'))
-  <div class="alert alert-warning alert-dismissible" role="alert">
-     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-     <i class="fa fa-check-circle"></i> {{session('status')}}
-  </div>
+@php
+	$ystates = [];
+	$additional_sum = [];
+@endphp
+@foreach($items as $item)
+	@php
+		$total_additional_items = $item->unit * $item->price;
+		array_push($additional_sum, $total_additional_items);
+		$final_additional_item = array_sum($additional_sum);
+	@endphp
+@endforeach
+	@php
+	@endphp
+@foreach($yprofit as $yp)
+	@php
+		$akomodasi = $yp->tools + $yp->packing + $yp->shipping_charges;
+		$total_akomodasi = $akomodasi * $yp->tonase;
+		$sum_income = $yp->income - $yp->price - $total_akomodasi;
+		array_push($ystates, $sum_income);
+	@endphp
+@endforeach
+@php
+		$year_profit = array_sum($ystates);
+@endphp
+
+@if($year_profit >= $goldprice * 85)
+	<div class="alert alert-info alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+		<i class="fa fa-check-circle"></i> keuntungan yang anda miliki telah memenuhi nishab untuk membayar zakat sebesar Rp {{number_format(($year_profit - $final_additional_item) * 2.5/100, 2, ',', '.')}}
+	</div>
 @endif
 <div class="panel">
 	<div class="panel-heading">
@@ -149,8 +174,8 @@
 				<div class="metric">
 					<span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
 					<p>
-						@if($yprofit->sum('yincome') >= $goldprice * 85)
-							<span class="number">Rp {{number_format($goldprice->sum('yincome') * 2.5/100, 2, ',', '.')}}</span>
+						@if($year_profit >= $goldprice * 85)
+							<span class="number">Rp {{number_format(($year_profit - $final_additional_item) * 2.5/100, 2, ',', '.')}}</span>
 						@else
 							<span class="number">Rp 0,00</span>
 						@endif
@@ -199,10 +224,10 @@
 							<th>Nisab</th>
 							<td>Rp. {{ number_format($goldprice * 85, 2, ',', '.') }}</td>
 						</tr>
-						@if($yprofit->sum('yincome') >= $goldprice * 85)
+						@if($year_profit >= $goldprice * 85)
 						<tr>
 							<th>Zakat</th>
-							<td>Rp {{number_format($yprofit->sum('yincome') * 2.5/100, 2, ',', '.')}}</td>
+							<td>Rp {{number_format(($year_profit - $final_additional_item)  * 2.5/100, 2, ',', '.')}}</td>
 						</tr>
 						@else
 						<tr>

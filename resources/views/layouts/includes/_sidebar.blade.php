@@ -13,7 +13,17 @@
           </div>
         </li>
         <li><a href="{{ route('barang.index') }}" class="{{ Request::routeIs('barang.index')? 'active' : '' }}"><i class="lnr lnr-database"></i><span>Barang</span></a></li>
-        <li><a href="{{ route('laporan.index') }}" class="{{ Request::routeIs('laporan.index')? 'active' : '' }}"><i class="lnr lnr-book"></i><span>Laporan</span></a></li>
+        <li>
+          <a href="#laporan" data-toggle="collapse" class="collapsed @if(Request::routeIs('laporan.index') || Request::routeIs('bookkeeping.index')) active @endif"><span class="lnr lnr-book"></span> <span>Laporan</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+          <div id="laporan" class="collapse ">
+            <ul class="nav">
+              <li><a href="{{ route('jurnal-ledger.index') }}" class="{{ Request::routeIs('jurnal-ledger.index') ? 'active' : '' }}"<span>Jurnal ledger</span></a></li>
+              <li><a href="{{ route('jurnal-pembelian.index') }}" class="{{ Request::routeIs('jurnal-penjualan.index')? 'active' : '' }}"><span>Laporan Pembelian</span></a></li>
+              <li><a href="{{ route('jurnal-penjualan.index') }}" class="{{ Request::routeIs('jurnal-penjualan.index')? 'active' : '' }}"><span>Laporan Penjualan</span></a></li>
+              <li><a href="{{ route('additional-item.index') }}" class="{{ Request::routeIs('bookkeeping.index') ? 'active' : '' }}"<span>Pembelian Lain</span></a></li>
+            </ul>
+          </div>
+        </li>
         {{--  <li><a href="{{ route('pembelian.index') }}" class=""><i class="lnr lnr-calendar-full"></i><span>Kalender</span></a></li>  --}}
         <li><a href="{{ route('setting.index') }}" class=""><i class="lnr lnr-cog"></i> <span>Setting</span></a></li>
       </ul>
