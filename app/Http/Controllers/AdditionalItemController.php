@@ -72,6 +72,8 @@ class AdditionalItemController extends Controller
         $bookkeeping_journal->unit = $request->get('item_unit');
         $bookkeeping_journal->price = $request->get('item_price');
         $bookkeeping_journal->save();
+
+        // add data to generalledger
         $JournalLedger = new JournalLedger;
         $JournalLedger->user_id = Auth::id();
         $JournalLedger->description = "Pembelian ".$request->get('item_name');

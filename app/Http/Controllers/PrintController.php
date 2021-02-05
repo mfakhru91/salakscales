@@ -18,6 +18,7 @@ class PrintController extends Controller
 		return view('users.barang.print', [
 			'items' => $items,
 			'seller' => $seller,
+			'note_id' => $note_id
 		]);
 	}
 	public function noteBuyer(Request $request)

@@ -87,7 +87,7 @@
                     @endif
                     <tr>
                         <th colspan="8">
-                            <h3>Laporan Pembelian</h3>
+                            <h3>Laporan Penjualan</h3>
                         </th>
                     </tr>
                     <tr>

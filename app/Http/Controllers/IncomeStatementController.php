@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\JournalLedger;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Bookkeeping_journal;
 use App\Buyer;
 use Auth;
 
-class JournalLedgerController extends Controller
+class IncomeStatementController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,39 +18,36 @@ class JournalLedgerController extends Controller
      */
     public function index()
     {
-        $lastMonth = Carbon::now()->subMonth()->format('m');
-        $additem =  Bookkeeping_journal::where('user_id', Auth::id())
-            ->whereMonth('date', $lastMonth)
+        $additionaltem =  Bookkeeping_journal::where('user_id', Auth::id())
+            ->whereMonth('date', Carbon::now('m')->timezone('Asia/Jakarta'))
             ->get();
 
-        $profit = Buyer::withCount(array('dvitem as price' => function ($query) use($lastMonth){
+        $profit = Buyer::withCount(array('dvitem as price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))
-                ->whereMonth('date_time', $lastMonth)
+                ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) use($lastMonth){
+            ->withCount(array('dvitem as income' => function ($query) {
                 return $query->select(DB::raw('sum(income)'))
-                    ->whereMonth('date_time', $lastMonth)
+                    ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) use($lastMonth){
+            ->withCount(array('dvitem as tonase' => function ($query) {
                 return $query->select(DB::raw('sum(new_tonase)'))
-                    ->whereMonth('date_time', $lastMonth)
+                    ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
             ->where('user_id', Auth::id())
             ->get();
-
-        $data =  JournalLedger::where('user_id', Auth::id())
-            ->whereMonth('created_at', Carbon::now('m')->timezone('Asia/Jakarta'))
-            ->get();
-
-        $lastDate = Carbon::now()->subMonth()->format('F');
-        return view('users.jurnal-ledger.index', [
-            'last_date' => $lastDate,
-            'data' => $data,
-            'additem' => $additem,
-            'profit' => $profit
+        //get day of this month
+        $startDate = Carbon::now();
+        $start = Carbon::now()->startOfMonth()->format('d F y');
+        $end = Carbon::now()->endOfMonth()->format('d F y');
+        return view('users.income-statement.index', [
+            'profit' => $profit,
+            'additem' => $additionaltem,
+            'start_day' => $start,
+            'end_day' => $end
 
         ]);
     }

@@ -13,6 +13,16 @@
         <div class="col-xs-12">
           <table class="">
             <tr>
+              <td rowspan="7">
+                <img src="{{asset('public/image/logo_nota.png')}}" height="100px" alt="logo">
+              </td>
+            </tr>
+            <tr>
+              <th colspan="3" style="width: 200px">
+                <h3>Nota Salak Pondoh</h3>
+              </th>
+            </tr>
+            <tr>
               <td style="width: 90px;">Date</td>
               <td style="width: 30px;">:</td>
               <td>{{ now()->format('d M Y') }}</td>
@@ -21,7 +31,7 @@
 
             @else
             <tr>
-              <td>No</td>
+              <td>No Nota</td>
               <td>:</td>
               <td>{{$note_id}}</td>
             </tr>

@@ -56,7 +56,7 @@
                     <thead>
                         <tr>
                             <th colspan="7">
-                                <h3>Jurnal Pembelian</h3>
+                                <h3>Laporan Pembelian</h3>
                             </th>
                         </tr>
                         <tr>

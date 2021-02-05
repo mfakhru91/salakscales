@@ -109,7 +109,6 @@ class DashboardController extends Controller
             }))
             ->where('user_id', Auth::id())
             ->get();
-
         // income this day
         $dprofit = Buyer::withCount(array('dvitem as price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))

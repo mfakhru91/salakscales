@@ -9,25 +9,33 @@
       <h3 class="panel-title">PRINT NOTA</h3>
     </div>
     <div class="panel-body" id="nota">
-      <div class="row">
-        <div class="col-xs-4  ">
-          <table class="">
-            <tr>
-              <td style="width: 90px;">Date</td>
-              <td style="width: 30px;">:</td>
-              <td>{{ now()->format('d M Y') }}</td>
-            </tr>
-            <tr>
-              <td>Nama</td>
-              <td>:</td>
-              <td>{{ $seller->name }}</td>
-            </tr>
-          </table>
-        </div>
-        <div class="col">
-
-        </div>
-      </div>
+      <table class="" style="width: 400px">
+        <tr>
+          <td rowspan="5">
+            <img src="{{asset('public/image/logo_nota.png')}}" height="100px" alt="logo">
+          </td>
+        </tr>
+        <tr>
+          <th colspan="3" style="width: 200px">
+            <h3>Nota Salak Pondoh</h3>
+          </th>
+        </tr>
+        <tr>
+          <td style="width: 90px;">Date</td>
+          <td style="width: 30px;">:</td>
+          <td>{{ now()->format('d M Y') }}</td>
+        </tr>
+        <tr>
+          <td>Nama</td>
+          <td>:</td>
+          <td>{{ $seller->name }}</td>
+        </tr>
+        <tr>
+          <td>No Nota</td>
+          <td>:</td>
+          <td>{{ $note_id }}</td>
+        </tr>
+      </table>
       <hr>
       <table class="table table-striped table-bordered">
         <thead>

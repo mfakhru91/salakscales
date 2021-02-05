@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('jurnal-pembelian', 'JurnalPembelianController');
 	Route::resource('jurnal-penjualan', 'JurnalPenjualanController');
 	Route::resource('additional-item', 'AdditionalItemController');
+	Route::resource('laporan-laba-rugi', 'IncomeStatementController');
 
 
 });

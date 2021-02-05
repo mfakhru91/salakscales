@@ -21,6 +21,7 @@
               <li><a href="{{ route('jurnal-pembelian.index') }}" class="{{ Request::routeIs('jurnal-penjualan.index')? 'active' : '' }}"><span>Laporan Pembelian</span></a></li>
               <li><a href="{{ route('jurnal-penjualan.index') }}" class="{{ Request::routeIs('jurnal-penjualan.index')? 'active' : '' }}"><span>Laporan Penjualan</span></a></li>
               <li><a href="{{ route('additional-item.index') }}" class="{{ Request::routeIs('bookkeeping.index') ? 'active' : '' }}"<span>Pembelian Lain</span></a></li>
+              <li><a href="{{ route('laporan-laba-rugi.index') }}" class="{{ Request::routeIs('laporan-laba-rugi.index') ? 'active' : '' }}"<span>Laporan Laba Rugi</span></a></li>
             </ul>
           </div>
         </li>
