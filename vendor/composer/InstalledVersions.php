@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'd3a43aec1551047cafe551aaeb021cd438a87c8b',
+    'reference' => '665e812e9492807d58041eca50a029966f6e5d79',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -444,7 +444,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'd3a43aec1551047cafe551aaeb021cd438a87c8b',
+      'reference' => '665e812e9492807d58041eca50a029966f6e5d79',
     ),
     'laravel/tinker' => 
     array (
@@ -1274,6 +1274,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '9dc4f203e36f2b486149058bade43c851dd97451',
+    ),
+    'webpatser/laravel-uuid' => 
+    array (
+      'pretty_version' => '3.0',
+      'version' => '3.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'bde126250b99773481c4d20d80f02948ab3b61db',
     ),
   ),
 );

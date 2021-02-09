@@ -66,6 +66,7 @@ class BarangController extends Controller
     $seller_id = $request->get('seller_id');
 
     $this->validate($request, [
+      'seller_id' => 'required',
       'tonase' => 'required|integer',
       'price' => 'required',
       'payment' => 'required',
@@ -85,7 +86,8 @@ class BarangController extends Controller
     $JournalLedger->description = "Pembelian Salak Ke " . $sellers->name;
     $JournalLedger->status = "kredit";
     $JournalLedger->nominal = $request->get('price');
-    $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+    $JournalLedger->item_id = $item->id;
+    $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
     $JournalLedger->save();
 
     return redirect()->route('barang.index', $seller_id)->with('status', 'Barang berhasil ditambah');
@@ -134,6 +136,13 @@ class BarangController extends Controller
     $item->seller_id = $request->get('seller_id');
     $item->status = $request->get('status');
     $item->save();
+
+    $JournalLedger = JournalLedger::where('item_id', $id)->first();
+    $JournalLedger->status = "kredit";
+    $JournalLedger->nominal = $request->get('price');
+    $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+    $JournalLedger->save();
+
     $seller_id = $request->get('seller_id');
     return redirect()->route('pembelian.show', $seller_id)->with('status', 'barang berhasil diperbarui');
   }
@@ -150,6 +159,8 @@ class BarangController extends Controller
   }
   public function delete($id)
   {
+    $JournalLedger = JournalLedger::where('item_id', $id)->first();
+    $JournalLedger->delete();
     $items = Item::findOrFail($id);
     $items->delete();
     return redirect()->route('barang.index')->with('status', '1 barang berhasil dihapus');
@@ -162,9 +173,11 @@ class BarangController extends Controller
     $seller = Seller::findOrFail($request->get('saller_id'));
     $item = $request->get('item');
     $items = Item::find($item);
+    $note_id = null;
     return view('users.barang.print', [
       'items' => $items,
       'seller' => $seller,
+      'note_id' => $note_id
     ]);
   }
   public function printBuyer(Request $request)

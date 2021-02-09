@@ -99,7 +99,7 @@
                         <th>Nama</th>
                         <th>Pasar</th>
                         <th colspan="2">Tonase</th>
-                        <th>Price</th>
+                        <th>Harga</th>
                         <th>Nota</th>
                         <th>Penjualan</th>
                     </tr>

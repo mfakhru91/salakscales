@@ -21,10 +21,10 @@ Route::get('/', function () {
 	return view('welcome');
 })->name('home.page');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth','middleware' => 'verified' ], function () {
 
 	// print
 	Route::post('/print/note/buyyer', 'PrintController@noteBuyer')->name('print.note.buyer');
@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/penjualan/editmincome/', 'PenjualanController@income')->name('penjulan.update.income');
 
 	// delivery item
+	Route::get('/dvitem/{id}/delete', 'DvitemController@delete')->name('dvitem.delete');
 	Route::post('/dvitem/delivery/deliveryUpdate', 'DvitemController@deliveryUpdate')->name('barang.deliveryUpdate');
 
 	// bookkeeping

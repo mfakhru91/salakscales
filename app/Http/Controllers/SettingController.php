@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Setting;
 use App\User;
 use Auth;
@@ -16,6 +18,7 @@ class SettingController extends Controller
      */
     public function index()
     {
+        $uuid = Str::uuid();
         $getUser = Auth::user();
         $getSetting = Setting::where('user_id', Auth::id())->first();
         $Setting = json_decode($getSetting);
@@ -28,6 +31,7 @@ class SettingController extends Controller
             return view('users.setting.index', [
                 'settings' => $getSetting,
                 'user' => $getUser,
+                'uuid' => $uuid
             ]);
         }
     }
@@ -85,6 +89,13 @@ class SettingController extends Controller
     public function update(Request $request, $id)
     {
         $updateUser = User::findOrFail($id);
+        if ($request->file('avatar')) {
+            if ($updateUser->avatar && file_exists(storage_path('app/public/' . $updateUser->avatar))) {
+                \Storage::delete('public/' . $updateUser->avatar);
+            }
+            $file = $request->file('avatar')->store('avatars', 'public');
+            $updateUser->avatar = $file;
+        }
         $updateUser->name = $request->get('username');
         $updateUser->save();
         $Setting = Setting::where('user_id', $id)

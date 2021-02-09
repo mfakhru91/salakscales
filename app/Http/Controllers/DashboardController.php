@@ -91,6 +91,10 @@ class DashboardController extends Controller
             ->where('user_id', Auth::id())
             ->get();
 
+        $yadditionaltem =  Bookkeeping_journal::where('user_id', Auth::id())
+            ->whereMonth('date', Carbon::now('m')->timezone('Asia/Jakarta'))
+            ->get();
+
         // income this month
         $mprofit = Buyer::withCount(array('dvitem as price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))
@@ -109,6 +113,11 @@ class DashboardController extends Controller
             }))
             ->where('user_id', Auth::id())
             ->get();
+
+        $additionaltem =  Bookkeeping_journal::where('user_id', Auth::id())
+            ->whereMonth('date', Carbon::now('m')->timezone('Asia/Jakarta'))
+            ->get();
+
         // income this day
         $dprofit = Buyer::withCount(array('dvitem as price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))
@@ -144,9 +153,9 @@ class DashboardController extends Controller
 
         // get additional item in year
         $items =  Bookkeeping_journal::where('user_id', Auth::id())
-                ->whereYear('date', Carbon::now('y')->timezone('Asia/Jakarta'))
-                ->orderBy('date', 'ASC')
-                ->get();
+            ->whereYear('date', Carbon::now('y')->timezone('Asia/Jakarta'))
+            ->orderBy('date', 'ASC')
+            ->get();
 
         return view('users.dashboard.index', [
             'yprofit' => $yprofit,
@@ -155,6 +164,8 @@ class DashboardController extends Controller
             'deliveryItem' => $deliveryItem,
             'debt' => $debt,
             'mprofit' => $mprofit,
+            'additionaltem' => $additionaltem,
+            'yadditionaltem' => $yadditionaltem,
             'dprofit' => $dprofit,
             'weeklydata' => $weeklydata,
             'dayItem' => $dayItem,

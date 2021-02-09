@@ -43,7 +43,7 @@
             <th>Tanggal</th>
             <th>Pembayaran</th>
             <th>Tonase</th>
-            <th>Price</th>
+            <th>Harga</th>
           </tr>
         </thead>
         <tbody>

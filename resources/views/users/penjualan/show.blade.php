@@ -166,7 +166,7 @@
                   </td>
                   <td style="width: 150px">
                     <a href="{{ route('dvitem.edit',$item->id) }}" class="btn btn-warning"><i class="lnr lnr-pencil"></i></a>
-                    <a href="{{ route('item.delete.pembelian',$item->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
+                    <a href="{{ route('dvitem.delete',$item->id) }}" class="btn btn-danger"><span class="lnr lnr-trash"></span></a>
                   </td>
                   <td style="padding-left:0px">
                     @if($item->status == '0')

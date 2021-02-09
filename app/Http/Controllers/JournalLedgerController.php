@@ -18,41 +18,81 @@ class JournalLedgerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $lastMonth = Carbon::now()->subMonth()->format('m');
-        $additem =  Bookkeeping_journal::where('user_id', Auth::id())
-            ->whereMonth('date', $lastMonth)
-            ->get();
+        if ($request->get('date_from') != null) {
+            $date = explode("-", $request->input('date_from'));
+            $date_selected = $request->get("date_from");
+            $year = str_replace(' ', '', $date[0]);
+            $month = str_replace(' ', '', $date[1]);
 
-        $profit = Buyer::withCount(array('dvitem as price' => function ($query) use($lastMonth){
-            return $query->select(DB::raw('sum(price)'))
-                ->whereMonth('date_time', $lastMonth)
-                ->where('status', '1');
-        }))
-            ->withCount(array('dvitem as income' => function ($query) use($lastMonth){
-                return $query->select(DB::raw('sum(income)'))
+            $additem =  Bookkeeping_journal::where('user_id', Auth::id())
+                ->whereMonth('date', $month)
+                ->get();
+
+            $profit = Buyer::withCount(array('dvitem as price' => function ($query) use ($lastMonth, $year, $month) {
+                return $query->select(DB::raw('sum(price)'))
+                    ->whereMonth('date_time', $month)
+                    ->whereYear('date_time', $year)
+                    ->where('status', '1');
+            }))
+                ->withCount(array('dvitem as income' => function ($query) use ($lastMonth, $year, $month) {
+                    return $query->select(DB::raw('sum(income)'))
+                        ->whereMonth('date_time', $month)
+                        ->whereYear('date_time', $year)
+                        ->where('status', '1');
+                }))
+                ->withCount(array('dvitem as tonase' => function ($query) use ($lastMonth, $year, $month) {
+                    return $query->select(DB::raw('sum(new_tonase)'))
+                        ->whereMonth('date_time', $month)
+                        ->whereYear('date_time', $year)
+                        ->where('status', '1');
+                }))
+                ->where('user_id', Auth::id())
+                ->get();
+
+            $data =  JournalLedger::where('user_id', Auth::id())
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year)
+                ->get();
+        } else {
+            $date_selected = null;
+            $additem =  Bookkeeping_journal::where('user_id', Auth::id())
+                ->whereMonth('date', $lastMonth)
+                ->get();
+
+            $profit = Buyer::withCount(array('dvitem as price' => function ($query) use ($lastMonth) {
+                return $query->select(DB::raw('sum(price)'))
                     ->whereMonth('date_time', $lastMonth)
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) use($lastMonth){
-                return $query->select(DB::raw('sum(new_tonase)'))
-                    ->whereMonth('date_time', $lastMonth)
-                    ->where('status', '1');
-            }))
-            ->where('user_id', Auth::id())
-            ->get();
+                ->withCount(array('dvitem as income' => function ($query) use ($lastMonth) {
+                    return $query->select(DB::raw('sum(income)'))
+                        ->whereMonth('date_time', $lastMonth)
+                        ->where('status', '1');
+                }))
+                ->withCount(array('dvitem as tonase' => function ($query) use ($lastMonth) {
+                    return $query->select(DB::raw('sum(new_tonase)'))
+                        ->whereMonth('date_time', $lastMonth)
+                        ->where('status', '1');
+                }))
+                ->where('user_id', Auth::id())
+                ->get();
 
-        $data =  JournalLedger::where('user_id', Auth::id())
-            ->whereMonth('created_at', Carbon::now('m')->timezone('Asia/Jakarta'))
-            ->get();
+            $data =  JournalLedger::where('user_id', Auth::id())
+                ->whereMonth('created_at', Carbon::now('m')->timezone('Asia/Jakarta'))
+                ->get();
+        }
+
 
         $lastDate = Carbon::now()->subMonth()->format('F');
         return view('users.jurnal-ledger.index', [
             'last_date' => $lastDate,
             'data' => $data,
             'additem' => $additem,
-            'profit' => $profit
+            'profit' => $profit,
+            'date_selected' => $date_selected
 
         ]);
     }

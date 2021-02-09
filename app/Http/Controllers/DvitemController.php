@@ -80,10 +80,21 @@ class DvitemController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $buyer = Buyer::findOrFail($request->get('buyerId'));
         $dvitem = Dvitem::findOrFail($id);
         $dvitem->price = $request->get('price');
         $dvitem->income = $request->get('income');
         $dvitem->save();
+
+        $JournalLedger = JournalLedger::where('dvitem_id',$id)->first();
+        if ( $JournalLedger != null) {
+            $JournalLedger->description = "Penjualan Ke Pasar " . $buyer->market;
+            $JournalLedger->status = "debet";
+            $JournalLedger->nominal = $request->get('income');
+            $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+            $JournalLedger->save();
+        }
+
         $buyerId = $request->get('buyerId');
         return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
     }
@@ -114,11 +125,21 @@ class DvitemController extends Controller
             $JournalLedger->description = "Penjualan Ke Pasar " . $buyer->market;
             $JournalLedger->status = "debet";
             $JournalLedger->nominal = $dvitem->income;
-            $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+            $JournalLedger->dvitem_id = $request->get('item_id');
+            $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
             $JournalLedger->save();
+
             $dvitem->status = '1';
             $dvitem->save();
             return redirect()->route('penjualan.show', $buyerId)->with('status', 'Pengiriman berhasil diperbarui');
         }
+    }
+    public function delete($id)
+    {
+        $dvitem = Dvitem::findOrFail($id);
+        $JournalLedger = JournalLedger::where('dvitem_id',$id)->first();
+        $dvitem->delete();
+        $JournalLedger->delete();
+        return redirect()->route('penjualan.show', $dvitem->buyer_Id)->with('status', 'Berhasil Menghapus Barang');
     }
 }

@@ -12,23 +12,33 @@
 	@php
 		$total_additional_items = $item->unit * $item->price;
 		array_push($additional_sum, $total_additional_items);
-		$final_additional_item = array_sum($additional_sum);
-	@endphp
+		@endphp
 @endforeach
 	@php
+		$final_additional_item = array_sum($additional_sum);
 	@endphp
 @foreach($yprofit as $yp)
 	@php
-		$akomodasi = $yp->tools + $yp->packing + $yp->shipping_charges;
-		$total_akomodasi = $akomodasi * $yp->tonase;
+		$total_akomodasi = ($yp->tools * $yp->tonase) + ($yp->packing * $yp->tonase) + ($yp->shipping_charges * $yp->tonase);
 		$sum_income = $yp->income - $yp->price - $total_akomodasi;
 		array_push($ystates, $sum_income);
 	@endphp
 @endforeach
 @php
-		$year_profit = array_sum($ystates);
+	$year_profit = array_sum($ystates);
 @endphp
-
+@php
+	$arr_additional_item = [];
+@endphp
+@foreach($additionaltem as $item)
+    @php
+       $get_price = $item->unit * $item->price;
+       array_push($arr_additional_item,$get_price);
+    @endphp
+@endforeach
+@php
+    $additional_item_total = array_sum($arr_additional_item);
+@endphp
 @if($year_profit >= $goldprice * 85)
 	<div class="alert alert-info alert-dismissible" role="alert">
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -132,7 +142,7 @@
 				<div class="metric bg-info">
 					<span class="icon"><i class="fas fa-wallet"></i></i></span>
 					<p>
-						<span class="number">Rp {{ number_format($monthly_profit, 2, ',', '.') }}</span>
+						<span class="number">Rp {{ number_format($monthly_profit - $additional_item_total, 2, ',', '.') }}</span>
 						<span class="title">Keuntungan</span>
 					</p>
 				</div>
@@ -219,6 +229,10 @@
 						<tr>
 							<th>Harga Emas</th>
 							<td>Rp. {{ number_format($goldprice, 2, ',', '.') }}</td>
+						</tr>
+						<tr>
+							<td>Total Keuntungan Bersih Dalam 1 Tahun</td>
+							<td>Rp. {{number_format($year_profit - $final_additional_item, 2, ',', '.')}}</td>
 						</tr>
 						<tr>
 							<th>Nisab</th>

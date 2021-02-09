@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Akun' => $baseDir . '/app/Akun.php',
     'App\\Bookkeeping_journal' => $baseDir . '/app/Bookkeeping_journal.php',
     'App\\Buyer' => $baseDir . '/app/Buyer.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
@@ -24,6 +25,7 @@ return array(
     'App\\Http\\Controllers\\DvitemController' => $baseDir . '/app/Http/Controllers/DvitemController.php',
     'App\\Http\\Controllers\\ExampleController' => $baseDir . '/app/Http/Controllers/ExampleController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
+    'App\\Http\\Controllers\\IncomeStatementController' => $baseDir . '/app/Http/Controllers/IncomeStatementController.php',
     'App\\Http\\Controllers\\JournalLedgerController' => $baseDir . '/app/Http/Controllers/JournalLedgerController.php',
     'App\\Http\\Controllers\\JurnalPembelianController' => $baseDir . '/app/Http/Controllers/JurnalPembelianController.php',
     'App\\Http\\Controllers\\JurnalPenjualanController' => $baseDir . '/app/Http/Controllers/JurnalPenjualanController.php',
@@ -61,6 +63,7 @@ return array(
     'App\\Setting' => $baseDir . '/app/Setting.php',
     'App\\Tonase' => $baseDir . '/app/Tonase.php',
     'App\\User' => $baseDir . '/app/User.php',
+    'App\\transaction' => $baseDir . '/app/transaction.php',
     'Asm89\\Stack\\Cors' => $vendorDir . '/asm89/stack-cors/src/Asm89/Stack/Cors.php',
     'Asm89\\Stack\\CorsService' => $vendorDir . '/asm89/stack-cors/src/Asm89/Stack/CorsService.php',
     'Brick\\Math\\BigDecimal' => $vendorDir . '/brick/math/src/BigDecimal.php',
@@ -4452,6 +4455,8 @@ return array(
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',
     'Webmozart\\Assert\\Mixin' => $vendorDir . '/webmozart/assert/src/Mixin.php',
+    'Webpatser\\Uuid\\Uuid' => $vendorDir . '/webpatser/laravel-uuid/src/Webpatser/Uuid/Uuid.php',
+    'Webpatser\\Uuid\\UuidServiceProvider' => $vendorDir . '/webpatser/laravel-uuid/src/Webpatser/Uuid/UuidServiceProvider.php',
     'Whoops\\Exception\\ErrorException' => $vendorDir . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
     'Whoops\\Exception\\Formatter' => $vendorDir . '/filp/whoops/src/Whoops/Exception/Formatter.php',
     'Whoops\\Exception\\Frame' => $vendorDir . '/filp/whoops/src/Whoops/Exception/Frame.php',

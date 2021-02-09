@@ -7,17 +7,31 @@
 @endsection
 @php
     $mstates = [];
+    $arr_tools = [];
+    $arr_packing = [];
+    $arr_shipping_charges = [];
+    $arr_buting_price = [];
 @endphp
 @foreach($profit as $mp)
     @php
-        $akomodasi = $mp->tools + $mp->packing + $mp->shipping_charges;
-        $total_akomodasi = $akomodasi * $mp->tonase;
-        $sum_income = $mp->income - $mp->price - $total_akomodasi;
+        $tools = $mp->tools * $mp->tonase;
+        $packing = $mp->packing * $mp->tonase;
+        $shipping_charges = $mp->shipping_charges * $mp->tonase;
+        $sum_income = $mp->income;
+        $sum_price = $mp->price;
+        array_push($arr_tools,$tools);
+        array_push($arr_packing,$packing);
+        array_push($arr_shipping_charges,$shipping_charges);
         array_push($mstates, $sum_income);
+        array_push($arr_buting_price, $sum_price);
     @endphp
 @endforeach
 @php
     $monthly_profit = array_sum($mstates);
+    $total_tools = array_sum($arr_tools);
+    $total_packing = array_sum($arr_packing);
+    $total_shipping_charges = array_sum($arr_shipping_charges);
+    $total_buying_price = array_sum($arr_buting_price);
 @endphp
 @php
 $arr_additional_item = [];
@@ -38,6 +52,23 @@ $arr_additional_item = [];
                 <h3 class="panel-title">Laporan Laba Rugi</h3>
             </div>
             <div class="panel-body">
+                <form action="{{route('laporan-laba-rugi.index')}}" method="GET">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-3" >
+                            <div class="input-group">
+                                <input class="form-control datepicker" @if($date_selected == null) placeholder="Pilih Bulan" @else value="{{ $date_selected }}" @endif id="month" type="datetime" name="month">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </div>
+                    <br>
+                </form>
                 <div id="dataprint">
                     <table class="table table-bordered">
                         <tr>
@@ -52,53 +83,40 @@ $arr_additional_item = [];
                             <th colspan="4">Pendapatan Penjualan</th>
                         </tr>
                         <tr>
-                            <th colspan="4">Penjualan Tiap Pasar :</th>
-                        </tr>
-                        @foreach($profit as $by)
-                        <tr>
                             <td style="width: 150px"></td>
-                            <th>{{$by->market}}</th>
-                            <td colspan="2">Rp. {{number_format($by->income, 2, ',', '.') }}</td>
+                            <th>Penjualan Bersih</th>
+                            <td colspan="2">Rp. {{number_format($monthly_profit, 2, ',', '.') }}</td>
                         </tr>
                         <tr>
-                            <th colspan="4">Akomodasi</th>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Harga Alat</td>
-                            <td>Rp. {{number_format($by->tools * $by->tonase, 2, ',', '.') }}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Ongkos Kirim</td>
-                            <td>Rp. {{ number_format($by->packing * $by->tonase, 2, ',', '.')}}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Ongkos Kirim</td>
-                            <td>Rp. {{ number_format($by->shipping_charges * $by->tonase, 2, ',', '.')}}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Total</th>
-                            <th>
-                                @php
-                                    $sub_total_akomodasi = $by->tools + $by->packing + $by->shipping_charges;
-                                    $total_akomodasi_final = $sub_total_akomodasi * $by->tonase;
-                                    $income = $by->income - $by->price - $total_akomodasi_final;
-                                @endphp
-                                Rp. {{number_format($income, 2, ',', '.')}}
-                            </th>
-                        </tr>
-                        @endforeach
-                        <tr>
-                            <th colspan="3">Laba Kotor</th>
+                            <th colspan="3">Total Pendapatan</th>
                             <th>Rp. {{number_format($monthly_profit, 2, ',', '.')}}</th>
                         </tr>
                         <tr>
                             <th colspan="4">Pengeluaran</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Pembelian Alat</td>
+                            <td>Rp. {{number_format($total_tools, 2, ',', '.') }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Gaji Kariyawan</td>
+                            <td>Rp. {{ number_format($total_packing, 2, ',', '.')}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Ongkos Kirim</td>
+                            <td>Rp. {{ number_format($total_shipping_charges, 2, ',', '.')}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Pembelian Salak</td>
+                            <td>Rp. {{number_format($total_buying_price , 2, ',', '.')}}</td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -108,11 +126,14 @@ $arr_additional_item = [];
                         </tr>
                         <tr>
                             <th colspan="3">Total</th>
-                            <th>Rp. {{number_format($additional_item_total, 2, ',', '.')}}</th>
+                            @php
+                                $total_pengeluaran = $additional_item_total + $total_buying_price + $total_shipping_charges + $total_packing + $total_tools;
+                            @endphp
+                            <th>Rp. {{number_format( $total_pengeluaran, 2, ',', '.')}}</th>
                         </tr>
                         <tr>
                             <th colspan="3">Laba Bersih</th>
-                            <th>Rp. {{number_format($monthly_profit - $additional_item_total, 2, ',', '.')}}</th>
+                            <th>Rp. {{number_format($monthly_profit - $total_pengeluaran, 2, ',', '.')}}</th>
                         </tr>
                     </table>
                 </div>
@@ -126,5 +147,34 @@ $arr_additional_item = [];
 @endsection
 @section('footer')
 <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+<script src="{{asset('public/js/jquery-3.5.1.min.js')}}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="{{asset('public/js/table2excel.js')}}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        $("#month").datepicker({
+            dateFormat: 'yy-mm',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+
+            onClose: function (dateText, inst) {
+              var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+              var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+              $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
+            }
+          });
+        $("#month").focus(function () {
+            $(".ui-datepicker-calendar").hide();
+            $("#ui-datepicker-div").position({
+              my: "center top",
+              at: "center bottom",
+              of: $(this)
+            });
+          });
+    });
+</script>
 @endsection
 

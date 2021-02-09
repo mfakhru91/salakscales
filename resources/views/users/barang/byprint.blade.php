@@ -63,7 +63,7 @@
           <tr>
             <th>Tanggal</th>
             <th>Tonase</th>
-            <th>Price</th>
+            <th>Harga</th>
             <th>Penjualan</th>
           </tr>
         </thead>

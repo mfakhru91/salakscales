@@ -44,7 +44,7 @@ class NoteController extends Controller
         $note->tonase = $request->get('tonase_total');
         $note->save();
         $note_id = Note::latest('id')->where('user_id', Auth::id())->first();
-        $item = Item::whereIn('id', $item_id)->update(['note_id' => $note_id->id]);
+        $item = Item::whereIn('id', $item_id)->update(['note_id' => $note->id]);
         return redirect()->route('pembelian.show', $request->get('seller_id'));
     }
     /**
@@ -100,7 +100,7 @@ class NoteController extends Controller
         $note->user_id = Auth::id();
         $note->save();
         $note_id = Note::latest('id')->where('user_id', Auth::id())->first();
-        $item = Dvitem::whereIn('id', $item_id)->update(['note_id' => $note_id->id]);
+        $item = Dvitem::whereIn('id', $item_id)->update(['note_id' => $note->id]);
         return redirect()->route('penjualan.show', $request->get('buyer_id'));
     }
 }

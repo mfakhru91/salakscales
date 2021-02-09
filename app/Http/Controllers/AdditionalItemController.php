@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Bookkeeping_journal;
 use Carbon\Carbon;
 use App\JournalLedger;
@@ -79,7 +80,8 @@ class AdditionalItemController extends Controller
         $JournalLedger->description = "Pembelian ".$request->get('item_name');
         $JournalLedger->status = "kredit";
         $JournalLedger->nominal = $price;
-        $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+        $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+        $JournalLedger->bookkeeping_journals_id = $bookkeeping_journal->id;
         $JournalLedger->save();
         return redirect()->route('additional-item.index')->with('status', 'berhail menambahkan pembelian barang');
     }
@@ -118,6 +120,8 @@ class AdditionalItemController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $price = $request->get('item_unit') *  $request->get('item_price');
+
         $this->validate($request, [
             'date' => 'required',
             'item_name' => 'required',
@@ -132,6 +136,14 @@ class AdditionalItemController extends Controller
         $bookkeeping_journal->unit = $request->get('item_unit');
         $bookkeeping_journal->price = $request->get('item_price');
         $bookkeeping_journal->save();
+
+        // add data to generalledger
+        $JournalLedger = JournalLedger::where('bookkeeping_journals_id',$bookkeeping_journal->id )->first();
+        $JournalLedger->description = "Pembelian ".$request->get('item_name');
+        $JournalLedger->status = "kredit";
+        $JournalLedger->nominal = $price;
+        $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+        $JournalLedger->save();
         return redirect()->route('additional-item.index')->with('status', 'berhail memperbarui pembelian barang');
     }
 
@@ -148,7 +160,9 @@ class AdditionalItemController extends Controller
     public function delete($id)
     {
         $items = Bookkeeping_journal::findOrFail($id);
+        $JournalLedger = JournalLedger::where('bookkeeping_journals_id',$id )->first();
         $items->delete();
+        $JournalLedger->delete();
         return redirect()->route('additional-item.index')->with('status', '1 barang berhasil dihapus');
     }
 
@@ -156,7 +170,7 @@ class AdditionalItemController extends Controller
     {
         $from = $request->get('from');
         $to = $request->get('to');
-        $date = Carbon::now()->timezone('Asia/Jakarta')->fordmat('Y-m-d');
+        $date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         if ($from == null) {
             $month_item =  Bookkeeping_journal::where('user_id', Auth::id())
                 ->where('date', $date)

@@ -29,19 +29,19 @@ array_push($arr_additional_item,"0");
 @php
     $laba_kotor_total = array_sum($arr_laba_kotor);
     $additional_item_total = array_sum($arr_additional_item);
-    $lastIncome = $laba_kotor_total - $additional_item_total
+    $lastIncome = $laba_kotor_total - $additional_item_total;
 @endphp
 <div class="panel">
     <div class="panel-heading">
         <h3 class="panel-title">Buku Besar</h3>
     </div>
     <div class="panel-body">
-        <form action="{{route('jurnal-pembelian.index')}}" method="GET">
+        <form action="{{route('jurnal-ledger.index')}}" method="GET">
             @csrf
             <div class="row">
                 <div class="col-md-2" >
                     <div class="input-group">
-                        <input class="form-control datepicker" placeholder="Pilih Bulan" id="month" type="datetime" name="date_from">
+                        <input class="form-control datepicker" @if($date_selected == null) placeholder="Pilih Bulan" @else value="{{ $date_selected }}" @endif id="month" type="datetime" name="date_from">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
@@ -76,7 +76,11 @@ array_push($arr_additional_item,"0");
                     <td>Rp. 0,00</td>
                     <td>Rp. 0,00</td>
                     <td>
+                        @if($lastIncome <= 0)
+                        Rp. 0,00
+                        @else
                         Rp. {{number_format($lastIncome , 2, ',', '.')}}
+                        @endif
                     </td>
                 </tr>
                 @foreach($data as $dt)

@@ -28,12 +28,18 @@
                     	<option value="{{ $seller->id }}">{{ $seller->name }}</option>
                     @endforeach
                   </select>
+                  @if($errors->has('seller_id'))
+                        <span class="help-block">{{ $errors->first('seller_id') }}</span>
+                  @endif
                 </div>
                 <label for="tonase">Tonase</label>
                 <div class="input-group">
                   <input type="text" class="form-control" name="tonase" id="tonase" value="">
                   <span class="input-group-addon">Kg</span>
                 </div>
+                @if($errors->has('tonase'))
+                      <span class="help-block">{{ $errors->first('tonase') }}</span>
+                @endif
                 <a href="#" class="btn btn-primary" style="margin-top: 10px" id="get-tonase">Timbang</a>
                 <br>
                 <label for="price">Harga</label>
@@ -41,6 +47,9 @@
                   <span class="input-group-addon">Rp</span>
                   <input type="text" class="form-control" name="price" id="price" value="">
                 </div>
+                @if($errors->has('price'))
+                      <span class="help-block">{{ $errors->first('price') }}</span>
+                @endif
                 <div class="form-group">
                   <label for="payment">Pembayaran</label>
                   <select class="form-control" name="payment">
@@ -48,6 +57,9 @@
                     <option value="debt">Hutang</option>
                     <option value="paid off">Lunas</option>
                   </select>
+                  @if($errors->has('payment'))
+                        <span class="help-block">{{ $errors->first('payment') }}</span>
+                  @endif
                 </div>
             </div>
             <div class="modal-footer">
@@ -190,6 +202,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+  const app_url = "{{ config('app.url') }}"
   const user_id = {{$user}}
   function noteSubmit() {
     document.getElementById("note").submit();
@@ -197,25 +210,37 @@
   $(document).ready(function() {
     $('#get-tonase').click(function(){
       $.ajax({
-        url:"http://localhost/skripsi/api/tonase/",
+        url:app_url+"/api/setting/"+user_id,
         type:"GET",
         async : true,
         success:function(result)
         {
-          let getTonaseData = JSON.stringify(result.data[0].tonase)
-          let tonase = getTonaseData / '1000'
-          $('#tonase').val(tonase)
+          var tools_id = result.data[0].tools_id
+          if( tools_id  == null ){
+            alert('Anda belum memasukan Id alat')
+          }
+          $.ajax({
+            url:app_url+"/api/tonase?tools_id="+tools_id,
+            type:"GET",
+            async : true,
+            success:function(result)
+            {
+              let tonase = result.data[0].tonase
+              $("#tonase").val(tonase)
+            }
+          });
         }
       });
     })
     $('#price').click(function(){
       $.ajax({
-        url:"http://localhost/skripsi/api/setting/"+user_id,
+        url:app_url+"/api/setting/"+user_id,
         type:"GET",
         async : true,
         success:function(result)
         {
-          let priceData = JSON.stringify(result.data[0].price)
+          console.log(result)
+          let priceData = result.data[0].price
           let getTonase = $('#tonase').val()
           let sumPrice = getTonase * priceData
           $('#price').val(sumPrice)

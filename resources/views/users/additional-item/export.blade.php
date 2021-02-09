@@ -102,7 +102,7 @@
         });
         $("#exportAdditionalIten").click(function(){
             var table2excel = new Table2Excel({
-                defaultFileName: "Bookkeeping Costume",
+                defaultFileName: "Pembelian Lainnya",
                 Number : true
             }
             );

@@ -489,6 +489,13 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
     );
 
     public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Webpatser\\Uuid' => 
+            array (
+                0 => __DIR__ . '/..' . '/webpatser/laravel-uuid/src',
+            ),
+        ),
         'S' => 
         array (
             'Sunra\\PhpSimple\\HtmlDomParser' => 
@@ -517,6 +524,7 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
     );
 
     public static $classMap = array (
+        'App\\Akun' => __DIR__ . '/../..' . '/app/Akun.php',
         'App\\Bookkeeping_journal' => __DIR__ . '/../..' . '/app/Bookkeeping_journal.php',
         'App\\Buyer' => __DIR__ . '/../..' . '/app/Buyer.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
@@ -535,6 +543,7 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
         'App\\Http\\Controllers\\DvitemController' => __DIR__ . '/../..' . '/app/Http/Controllers/DvitemController.php',
         'App\\Http\\Controllers\\ExampleController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExampleController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\IncomeStatementController' => __DIR__ . '/../..' . '/app/Http/Controllers/IncomeStatementController.php',
         'App\\Http\\Controllers\\JournalLedgerController' => __DIR__ . '/../..' . '/app/Http/Controllers/JournalLedgerController.php',
         'App\\Http\\Controllers\\JurnalPembelianController' => __DIR__ . '/../..' . '/app/Http/Controllers/JurnalPembelianController.php',
         'App\\Http\\Controllers\\JurnalPenjualanController' => __DIR__ . '/../..' . '/app/Http/Controllers/JurnalPenjualanController.php',
@@ -572,6 +581,7 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
         'App\\Setting' => __DIR__ . '/../..' . '/app/Setting.php',
         'App\\Tonase' => __DIR__ . '/../..' . '/app/Tonase.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
+        'App\\transaction' => __DIR__ . '/../..' . '/app/transaction.php',
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack/Cors.php',
         'Asm89\\Stack\\CorsService' => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack/CorsService.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
@@ -4963,6 +4973,8 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
+        'Webpatser\\Uuid\\Uuid' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/Uuid.php',
+        'Webpatser\\Uuid\\UuidServiceProvider' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/UuidServiceProvider.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',
         'Whoops\\Exception\\Frame' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Frame.php',

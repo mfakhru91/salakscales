@@ -160,7 +160,8 @@ class PembelianController extends Controller
     $JournalLedger->description = "Pembelian Salak Ke " . $sellers->name;
     $JournalLedger->status = "kredit";
     $JournalLedger->nominal = $request->get('price');
-    $JournalLedger->date = Carbon::now('m')->timezone('Asia/Jakarta')->format('Y-m-d');
+    $JournalLedger->item_id = $item->id;
+    $JournalLedger->date = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
     $JournalLedger->save();
 
 
