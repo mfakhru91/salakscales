@@ -40,10 +40,12 @@
     $additional_item_total = array_sum($arr_additional_item);
 @endphp
 @if($year_profit >= $goldprice * 85)
+	@if ($hijri_mont-0 == $hijri_mont_created_at-1)
 	<div class="alert alert-info alert-dismissible" role="alert">
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 		<i class="fa fa-check-circle"></i> keuntungan yang anda miliki telah memenuhi nishab untuk membayar zakat sebesar Rp {{number_format(($year_profit - $final_additional_item) * 2.5/100, 2, ',', '.')}}
 	</div>
+	@endif
 @endif
 <div class="panel">
 	<div class="panel-heading">
@@ -185,9 +187,13 @@
 					<span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
 					<p>
 						@if($year_profit >= $goldprice * 85)
-							<span class="number">Rp {{number_format(($year_profit - $final_additional_item) * 2.5/100, 2, ',', '.')}}</span>
+							@if ($hijri_mont-0 == $hijri_mont_created_at-1)
+							<span class="number">Rp. {{number_format(($year_profit - $final_additional_item) * 2.5/100, 2, ',', '.')}}</span>
+							@else
+							<span class="number">Rp. 0,00</span>
+							@endif
 						@else
-							<span class="number">Rp 0,00</span>
+							<span class="number">Rp. 0,00</span>
 						@endif
 						<span class="title">Zakat</span>
 					</p>
@@ -231,7 +237,7 @@
 							<td>Rp. {{ number_format($goldprice, 2, ',', '.') }}</td>
 						</tr>
 						<tr>
-							<td>Total Keuntungan Bersih Dalam 1 Tahun</td>
+							<td>Total Keuntungan Bersih Dalam 1 Tahun (Hijriah)</td>
 							<td>Rp. {{number_format($year_profit - $final_additional_item, 2, ',', '.')}}</td>
 						</tr>
 						<tr>
@@ -241,12 +247,16 @@
 						@if($year_profit >= $goldprice * 85)
 						<tr>
 							<th>Zakat</th>
+							@if($hijri_mont-0 == $hijri_mont_created_at-1)
 							<td>Rp {{number_format(($year_profit - $final_additional_item)  * 2.5/100, 2, ',', '.')}}</td>
+							@else
+							<td>Rp.0,00</td>
+							@endif
 						</tr>
 						@else
 						<tr>
 							<th>Zakat</th>
-							<td>Rp.0</td>
+							<td>Rp.0,00</td>
 						</tr>
 						@endif
 					</table>

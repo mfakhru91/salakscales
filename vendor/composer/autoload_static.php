@@ -137,6 +137,7 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'Goutte\\' => 7,
+            'GeniusTS\\HijriDate\\' => 19,
         ),
         'F' => 
         array (
@@ -417,6 +418,10 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
         'Goutte\\' => 
         array (
             0 => __DIR__ . '/..' . '/fabpot/goutte/Goutte',
+        ),
+        'GeniusTS\\HijriDate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/geniusts/hijri-dates/src',
         ),
         'Fruitcake\\Cors\\' => 
         array (
@@ -1424,6 +1429,14 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
         'Fideloper\\Proxy\\TrustedProxyServiceProvider' => __DIR__ . '/..' . '/fideloper/proxy/src/TrustedProxyServiceProvider.php',
         'Fruitcake\\Cors\\CorsServiceProvider' => __DIR__ . '/..' . '/fruitcake/laravel-cors/src/CorsServiceProvider.php',
         'Fruitcake\\Cors\\HandleCors' => __DIR__ . '/..' . '/fruitcake/laravel-cors/src/HandleCors.php',
+        'GeniusTS\\HijriDate\\Converter' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Converter.php',
+        'GeniusTS\\HijriDate\\Date' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Date.php',
+        'GeniusTS\\HijriDate\\Hijri' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Hijri.php',
+        'GeniusTS\\HijriDate\\Translations\\Arabic' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Translations/Arabic.php',
+        'GeniusTS\\HijriDate\\Translations\\English' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Translations/English.php',
+        'GeniusTS\\HijriDate\\Translations\\Persian' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Translations/Persian.php',
+        'GeniusTS\\HijriDate\\Translations\\Russian' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Translations/Russian.php',
+        'GeniusTS\\HijriDate\\Translations\\TranslationInterface' => __DIR__ . '/..' . '/geniusts/hijri-dates/src/Translations/TranslationInterface.php',
         'Goutte\\Client' => __DIR__ . '/..' . '/fabpot/goutte/Goutte/Client.php',
         'GuzzleHttp\\Client' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Client.php',
         'GuzzleHttp\\ClientInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/ClientInterface.php',

@@ -25,6 +25,13 @@ class DashboardController extends Controller
     private $states = [];
     public function index()
     {
+        $hijri_year = \GeniusTS\HijriDate\Date::now()->format('Y');
+        $hijri_mont = \GeniusTS\HijriDate\Date::now()->format('m');
+        $hijri_day = \GeniusTS\HijriDate\Date::now()->format('d');
+        $year_hijri_converter = \GeniusTS\HijriDate\Hijri::convertToGregorian($hijri_day, $hijri_mont, $hijri_year)->format('Y');
+        $user_create_date = Auth::user()->created_at;
+        $user_date_formate = Carbon::createFromFormat('Y-m-d H:i:s', $user_create_date)->format('Y-m-d');
+        $user_hijri_month = \GeniusTS\HijriDate\Hijri::convertToHijri($user_date_formate)->format('m');
         // gold scraping
         $client = new Client();
         $page = $client->request('GET', 'https://www.logammulia.com/id');
@@ -47,10 +54,10 @@ class DashboardController extends Controller
             ->get();
 
         // get data seller with item price count in this year
-        $priceyear  = Seller::withCount(array('item as total_price' => function ($query) {
+        $priceyear  = Seller::withCount(array('item as total_price' => function ($query) use($year_hijri_converter){
             return $query->select(DB::raw('sum(price)'))
                 ->where('status', 'sold')
-                ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'));
+                ->whereYear('created_at', $year_hijri_converter);
         }))
             ->where('user_id', Auth::id())
             ->get();
@@ -73,19 +80,19 @@ class DashboardController extends Controller
             ->get();
 
         // income this year
-        $yprofit = Buyer::withCount(array('dvitem as price' => function ($query) {
+        $yprofit = Buyer::withCount(array('dvitem as price' => function ($query) use($year_hijri_converter){
             return $query->select(DB::raw('sum(price)'))
-                ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+                ->whereYear('date_time', $year_hijri_converter)
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) {
+            ->withCount(array('dvitem as income' => function ($query) use($year_hijri_converter){
                 return $query->select(DB::raw('sum(income)'))
-                    ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+                    ->whereYear('date_time', $year_hijri_converter)
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) {
+            ->withCount(array('dvitem as tonase' => function ($query) use($year_hijri_converter){
                 return $query->select(DB::raw('sum(new_tonase)'))
-                    ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+                    ->whereYear('date_time', $year_hijri_converter)
                     ->where('status', '1');
             }))
             ->where('user_id', Auth::id())
@@ -171,6 +178,9 @@ class DashboardController extends Controller
             'dayItem' => $dayItem,
             'goldprice' => $goldprice,
             'items' => $items,
+            'hijri_mont' => $hijri_mont,
+            'hijri_year'=> $hijri_year,
+            'hijri_mont_created_at' => $user_hijri_month,
         ]);
     }
 

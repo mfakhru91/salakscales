@@ -944,6 +944,50 @@
             "install-path": "../fzaninotto/faker"
         },
         {
+            "name": "geniusts/hijri-dates",
+            "version": "1.1.8",
+            "version_normalized": "1.1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GeniusTS/hijri-dates.git",
+                "reference": "1bd183d1056aab098aa70ba8e1cdfbc90406d16b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GeniusTS/hijri-dates/zipball/1bd183d1056aab098aa70ba8e1cdfbc90406d16b",
+                "reference": "1bd183d1056aab098aa70ba8e1cdfbc90406d16b",
+                "shasum": ""
+            },
+            "require": {
+                "nesbot/carbon": "^2.16|^1.22",
+                "php": ">=7"
+            },
+            "time": "2020-12-19T22:00:30+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "GeniusTS\\HijriDate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Abdul-Kader Zein-Eddin",
+                    "email": "aboudeh1987@gmail.com"
+                }
+            ],
+            "description": "PHP library to convert Gregorian date to Hijri date and vice versa",
+            "support": {
+                "issues": "https://github.com/GeniusTS/hijri-dates/issues",
+                "source": "https://github.com/GeniusTS/hijri-dates/tree/1.1.8"
+            },
+            "install-path": "../geniusts/hijri-dates"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.5.5",
             "version_normalized": "6.5.5.0",

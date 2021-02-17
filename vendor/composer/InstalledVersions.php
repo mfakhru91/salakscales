@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '665e812e9492807d58041eca50a029966f6e5d79',
+    'reference' => '21ae0347315157114a322664b7439730e5dc1894',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -181,6 +181,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'fc10d778e4b84d5bd315dad194661e091d307c6f',
+    ),
+    'geniusts/hijri-dates' => 
+    array (
+      'pretty_version' => '1.1.8',
+      'version' => '1.1.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '1bd183d1056aab098aa70ba8e1cdfbc90406d16b',
     ),
     'guzzlehttp/guzzle' => 
     array (
@@ -444,7 +453,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '665e812e9492807d58041eca50a029966f6e5d79',
+      'reference' => '21ae0347315157114a322664b7439730e5dc1894',
     ),
     'laravel/tinker' => 
     array (
