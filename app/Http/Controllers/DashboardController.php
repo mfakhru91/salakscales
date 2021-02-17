@@ -31,7 +31,13 @@ class DashboardController extends Controller
         $year_hijri_converter = \GeniusTS\HijriDate\Hijri::convertToGregorian($hijri_day, $hijri_mont, $hijri_year)->format('Y');
         $user_create_date = Auth::user()->created_at;
         $user_date_formate = Carbon::createFromFormat('Y-m-d H:i:s', $user_create_date)->format('Y-m-d');
+        $user_hijri_year = \GeniusTS\HijriDate\Hijri::convertToHijri($user_date_formate)->format('Y');
         $user_hijri_month = \GeniusTS\HijriDate\Hijri::convertToHijri($user_date_formate)->format('m');
+        $user_hijri_day = \GeniusTS\HijriDate\Hijri::convertToHijri($user_date_formate)->format('d');
+
+        $last_month = '0' . ($user_hijri_month - 1);
+        $year_hijri_start = \GeniusTS\HijriDate\Hijri::convertToGregorian($user_hijri_day, $user_hijri_month, $user_hijri_year);
+        $year_hijri_end = \GeniusTS\HijriDate\Hijri::convertToGregorian($hijri_day, $last_month, $hijri_year + 1);
         // gold scraping
         $client = new Client();
         $page = $client->request('GET', 'https://www.logammulia.com/id');
@@ -54,7 +60,7 @@ class DashboardController extends Controller
             ->get();
 
         // get data seller with item price count in this year
-        $priceyear  = Seller::withCount(array('item as total_price' => function ($query) use($year_hijri_converter){
+        $priceyear  = Seller::withCount(array('item as total_price' => function ($query) use ($year_hijri_converter) {
             return $query->select(DB::raw('sum(price)'))
                 ->where('status', 'sold')
                 ->whereYear('created_at', $year_hijri_converter);
@@ -80,19 +86,38 @@ class DashboardController extends Controller
             ->get();
 
         // income this year
-        $yprofit = Buyer::withCount(array('dvitem as price' => function ($query) use($year_hijri_converter){
+        $yprofit = Buyer::withCount(array('dvitem as price' => function ($query) use ($year_hijri_start, $year_hijri_end) {
             return $query->select(DB::raw('sum(price)'))
-                ->whereYear('date_time', $year_hijri_converter)
+                ->whereBetween('date_time', [$year_hijri_start, $year_hijri_end])
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) use($year_hijri_converter){
+            ->withCount(array('dvitem as income' => function ($query) use ($year_hijri_start, $year_hijri_end) {
                 return $query->select(DB::raw('sum(income)'))
-                    ->whereYear('date_time', $year_hijri_converter)
+                    ->whereBetween('date_time', [$year_hijri_start, $year_hijri_end])
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) use($year_hijri_converter){
+            ->withCount(array('dvitem as tonase' => function ($query) use ($year_hijri_start, $year_hijri_end) {
                 return $query->select(DB::raw('sum(new_tonase)'))
-                    ->whereYear('date_time', $year_hijri_converter)
+                    ->whereBetween('date_time', [$year_hijri_start, $year_hijri_end])
+                    ->where('status', '1');
+            }))
+            ->where('user_id', Auth::id())
+            ->get();
+
+        // income this year
+        $yprofit_gregorian = Buyer::withCount(array('dvitem as price' => function ($query){
+            return $query->select(DB::raw('sum(price)'))
+                ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'))
+                ->where('status', '1');
+        }))
+            ->withCount(array('dvitem as income' => function ($query){
+                return $query->select(DB::raw('sum(income)'))
+                    ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'))
+                    ->where('status', '1');
+            }))
+            ->withCount(array('dvitem as tonase' => function ($query){
+                return $query->select(DB::raw('sum(new_tonase)'))
+                    ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
             ->where('user_id', Auth::id())
@@ -163,9 +188,14 @@ class DashboardController extends Controller
             ->whereYear('date', Carbon::now('y')->timezone('Asia/Jakarta'))
             ->orderBy('date', 'ASC')
             ->get();
-
+        // get additional item in hijri year
+        $hijri_items =  Bookkeeping_journal::where('user_id', Auth::id())
+            ->whereBetween('date', [$year_hijri_start, $year_hijri_end])
+            ->orderBy('date', 'ASC')
+            ->get();
         return view('users.dashboard.index', [
             'yprofit' => $yprofit,
+            'yprofit_gregorian' => $yprofit_gregorian,
             'price' => $seller,
             'dvitems' => $dvitems,
             'deliveryItem' => $deliveryItem,
@@ -178,8 +208,9 @@ class DashboardController extends Controller
             'dayItem' => $dayItem,
             'goldprice' => $goldprice,
             'items' => $items,
+            'hijri_items' => $hijri_items,
             'hijri_mont' => $hijri_mont,
-            'hijri_year'=> $hijri_year,
+            'hijri_year' => $hijri_year,
             'hijri_mont_created_at' => $user_hijri_month,
         ]);
     }

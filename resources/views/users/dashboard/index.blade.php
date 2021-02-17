@@ -6,7 +6,9 @@
 @section('content')
 @php
 	$ystates = [];
+	$ystates_g = [];
 	$additional_sum = [];
+	$additional_sum_hijri = [];
 @endphp
 @foreach($items as $item)
 	@php
@@ -14,8 +16,15 @@
 		array_push($additional_sum, $total_additional_items);
 		@endphp
 @endforeach
+@foreach($hijri_items as $hijri_items)
+	@php
+		$total_additional_items = $hijri_items->unit * $hijri_items->price;
+		array_push($additional_sum_hijri, $total_additional_items);
+		@endphp
+@endforeach
 	@php
 		$final_additional_item = array_sum($additional_sum);
+		$final_additional_item_hijri = array_sum($additional_sum_hijri);
 	@endphp
 @foreach($yprofit as $yp)
 	@php
@@ -24,8 +33,16 @@
 		array_push($ystates, $sum_income);
 	@endphp
 @endforeach
+@foreach($yprofit_gregorian as $yg)
+	@php
+		$total_akomodasi = ($yg->tools * $yg->tonase) + ($yg->packing * $yg->tonase) + ($yg->shipping_charges * $yg->tonase);
+		$sum_income = $yg->income - $yg->price - $total_akomodasi;
+		array_push($ystates_g, $sum_income);
+	@endphp
+@endforeach
 @php
 	$year_profit = array_sum($ystates);
+	$year_profit_g = array_sum($ystates_g);
 @endphp
 @php
 	$arr_additional_item = [];
@@ -188,7 +205,7 @@
 					<p>
 						@if($year_profit >= $goldprice * 85)
 							@if ($hijri_mont-0 == $hijri_mont_created_at-1)
-							<span class="number">Rp. {{number_format(($year_profit - $final_additional_item) * 2.5/100, 2, ',', '.')}}</span>
+							<span class="number">Rp. {{number_format(($year_profit - $final_additional_item_hijri) * 2.5/100, 2, ',', '.')}}</span>
 							@else
 							<span class="number">Rp. 0,00</span>
 							@endif
@@ -199,6 +216,20 @@
 					</p>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+<div class="panel">
+	<div class="panel-heading">
+		<h3 class="panel-title">Data Penjualan Tahunan</h3>
+	</div>
+	<div class="panel-body">
+		<div class="metric">
+			<span class="icon"><i class="fas fa-wallet"></i></span>
+			<p>
+				<span class="number">Rp. {{ number_format($year_profit_g - $final_additional_item, 2, ',', '.') }}</span>
+				<span class="title">Keuntungan Tahun Ini</span>
+			</p>
 		</div>
 	</div>
 </div>
@@ -238,7 +269,7 @@
 						</tr>
 						<tr>
 							<td>Total Keuntungan Bersih Dalam 1 Tahun (Hijriah)</td>
-							<td>Rp. {{number_format($year_profit - $final_additional_item, 2, ',', '.')}}</td>
+							<td>Rp. {{number_format($year_profit - $final_additional_item_hijri, 2, ',', '.')}}</td>
 						</tr>
 						<tr>
 							<th>Nisab</th>
@@ -248,7 +279,7 @@
 						<tr>
 							<th>Zakat</th>
 							@if($hijri_mont-0 == $hijri_mont_created_at-1)
-							<td>Rp {{number_format(($year_profit - $final_additional_item)  * 2.5/100, 2, ',', '.')}}</td>
+							<td>Rp {{number_format(($year_profit - $final_additional_item_hijri)  * 2.5/100, 2, ',', '.')}}</td>
 							@else
 							<td>Rp.0,00</td>
 							@endif
