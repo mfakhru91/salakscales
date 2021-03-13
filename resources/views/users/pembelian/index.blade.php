@@ -11,7 +11,7 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col">
-        <h3 class="panel-title">Pembeli</h3>
+        <h3 class="panel-title">Pelanggan</h3>
       </div>
       <div class="col">
         <div class="text-right">

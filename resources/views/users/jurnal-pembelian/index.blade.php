@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-md-3" >
                     <div class="input-group">
-                        <input class="form-control datepicker" placeholder="dari tanggal" id="dateTo" type="datetime" value="{{$dateto? $dateto : ''}}" name="date_to">
+                        <input class="form-control datepicker" placeholder="sampai tanggal" id="dateTo" type="datetime" value="{{$dateto? $dateto : ''}}" name="date_to">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>

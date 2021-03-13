@@ -21,9 +21,9 @@
               <form class="" action="{{ route('barang.store') }}" method="post">
                 @csrf
                 <div class="form-group">
-                  <label for="payment">Pembeli</label>
+                  <label for="payment">Pelanggan</label>
                   <select class="form-control" name="seller_id">
-                    <option value="" selected>Pembeli</option>
+                    <option value="" selected>Pilih Pelanggan</option>
                     @foreach($sellers as $seller)
                     	<option value="{{ $seller->id }}">{{ $seller->name }}</option>
                     @endforeach
@@ -76,7 +76,7 @@
 		</div>
 		<div class="panel-body">
       <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
-        Tambah Pelajaran <i class="lnr lnr-plus-circle"></i>
+        Tambah Barang <i class="lnr lnr-plus-circle"></i>
       </button>
       <form style="margin-top: 10px" action="{{ route('barang.delivery') }}" id="delivery" method="POST">
         @csrf

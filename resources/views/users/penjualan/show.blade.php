@@ -21,9 +21,7 @@
       <div class="profile-header">
         <div class="overlay"></div>
         <div class="profile-main">
-          <img src="" class="img-circle" alt="Avatar" style="object-fit: cover; height: 100px; width: 100px;">
-          <h3 class="name"></h3>
-          <span class="online-status status-available">Available</span>
+          <h3 class="name">{{ $buyyers->name}}</h3>
         </div>
         <div class="profile-stat">
           <div class="row">

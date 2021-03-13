@@ -17,7 +17,7 @@
           <a href="#laporan" data-toggle="collapse" class="collapsed @if(Request::routeIs('laporan.index') || Request::routeIs('bookkeeping.index')) active @endif"><span class="lnr lnr-book"></span> <span>Laporan</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
           <div id="laporan" class="collapse ">
             <ul class="nav">
-              <li><a href="{{ route('jurnal-ledger.index') }}" class="{{ Request::routeIs('jurnal-ledger.index') ? 'active' : '' }}"<span>General ledger</span></a></li>
+              <li><a href="{{ route('jurnal-ledger.index') }}" class="{{ Request::routeIs('jurnal-ledger.index') ? 'active' : '' }}"<span>Buku Besar</span></a></li>
               <li><a href="{{ route('jurnal-pembelian.index') }}" class="{{ Request::routeIs('jurnal-penjualan.index')? 'active' : '' }}"><span>Laporan Pembelian</span></a></li>
               <li><a href="{{ route('jurnal-penjualan.index') }}" class="{{ Request::routeIs('jurnal-penjualan.index')? 'active' : '' }}"><span>Laporan Penjualan</span></a></li>
               <li><a href="{{ route('additional-item.index') }}" class="{{ Request::routeIs('bookkeeping.index') ? 'active' : '' }}"<span>Pembelian Lain</span></a></li>

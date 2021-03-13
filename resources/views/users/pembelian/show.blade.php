@@ -15,9 +15,7 @@
       <div class="profile-header">
         <div class="overlay"></div>
         <div class="profile-main">
-          <img src="" class="img-circle" alt="Avatar" style="object-fit: cover; height: 100px; width: 100px;">
-          <h3 class="name"></h3>
-          <span class="online-status status-available">Available</span>
+          <h3 class="name">{{ $seller->name}}</h3>
         </div>
         <div class="profile-stat">
           <div class="row">
@@ -25,7 +23,7 @@
               Rp. {{ number_format($paidOff->item->sum('price')), 2,',', '.' }} <span>Profit</span>
             </div>
             <div class="col-md-6 stat-item">
-              {{ $paidOff->item->count() }} <span>Barang</span>
+              {{ $paidOff->item->count() }} <span>Barang Lunas</span>
             </div>
           </div>
         </div>
@@ -129,7 +127,11 @@
                   <td> {{ $item->date($item->created_at) }} </td>
                   <td> {{ $item->tonase }} </td>
                   <td> Rp. {{ number_format($item->price, 2, ',', '.') }} </td>
-                  <td> {{ $item->payment }} </td>
+                  @if ($item->payment == 'paid off')
+                    <td>Lunas</td>
+                  @else
+                    <td>Hutang</td>
+                  @endif
                   <td>
                     <form action="{{ route('print.note') }}" id="note" method="post">
                       @csrf

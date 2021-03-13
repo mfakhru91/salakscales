@@ -38,6 +38,7 @@ class DashboardController extends Controller
         $last_month = '0' . ($user_hijri_month - 1);
         $year_hijri_start = \GeniusTS\HijriDate\Hijri::convertToGregorian($user_hijri_day, $user_hijri_month, $user_hijri_year);
         $year_hijri_end = \GeniusTS\HijriDate\Hijri::convertToGregorian($hijri_day, $last_month, $hijri_year + 1);
+        
         // gold scraping
         $client = new Client();
         $page = $client->request('GET', 'https://www.logammulia.com/id');
@@ -171,7 +172,7 @@ class DashboardController extends Controller
 
         //items this day
         $dayItem = Dvitem::where('user_id', Auth::id())
-            ->whereDay('date_time', Carbon::now('d')->timezone('Asia/Jakarta'))
+            ->whereDay('created_at', Carbon::now('d')->timezone('Asia/Jakarta'))
             ->where('status', '1')
             ->get();
 
