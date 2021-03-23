@@ -64,6 +64,7 @@ class AdditionalItemController extends Controller
             'item_name' => 'required',
             'item_unit' => 'required|numeric',
             'item_price' => 'required|numeric',
+            'responsible_person' => 'required',
         ]);
 
         $bookkeeping_journal = new Bookkeeping_journal;
@@ -72,6 +73,7 @@ class AdditionalItemController extends Controller
         $bookkeeping_journal->name = $request->get('item_name');
         $bookkeeping_journal->unit = $request->get('item_unit');
         $bookkeeping_journal->price = $request->get('item_price');
+        $bookkeeping_journal->responsible_person = $request->get('responsible_person');
         $bookkeeping_journal->save();
 
         // add data to generalledger

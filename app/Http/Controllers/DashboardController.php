@@ -12,6 +12,7 @@ use App\Seller;
 use App\Bookkeeping_journal;
 use App\Buyer;
 use App\Dvitem;
+use App\Zakat;
 use Auth;
 use Facade\Ignition\QueryRecorder\Query;
 
@@ -40,16 +41,27 @@ class DashboardController extends Controller
         $year_hijri_end = \GeniusTS\HijriDate\Hijri::convertToGregorian($hijri_day, $last_month, $hijri_year + 1);
         
         // gold scraping
-        $client = new Client();
-        $page = $client->request('GET', 'https://www.logammulia.com/id');
-
-        $page->filter('.current')->each(function ($item) {
-            array_push($this->states, $item->text());
-        });
-        preg_match_all('!\d+!', $this->states[0], $matches);
-
-        $goldprice = $matches[0][0] . $matches[0][1];
-
+        $connected = @fsockopen("www.logammulia.com", 80); //website, port  (try 80 or 443)
+        if ($connected){
+            $client = new Client();
+            $page = $client->request('GET', 'https://www.logammulia.com/id');
+            $response = $client->getInternalResponse();
+            if ($response->getStatusCode() == 200) {
+                $page->filter('.current')->each(function ($item) {
+                    array_push($this->states, $item->text());
+                });
+                preg_match_all('!\d+!', $this->states[0], $matches);
+        
+                $goldprice = $matches[0][0] . $matches[0][1];
+                $connection = 'internet_access';
+            }else{
+                $goldprice = null;
+                $connection = 'internet_access';
+            }
+        }else{
+            $goldprice = null;
+            $connection = 'no_internet_access';
+        }
         // get data seller with item price count in this month
         $seller = Seller::withCount(array('item as total_price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))
@@ -194,7 +206,22 @@ class DashboardController extends Controller
             ->whereBetween('date', [$year_hijri_start, $year_hijri_end])
             ->orderBy('date', 'ASC')
             ->get();
+        
+        // get zakat
+
+        $zakat = Zakat::where('user_id', Auth::id())->first();
+        if (empty($zakat)) {
+            $newzakat = new Zakat;
+            $newzakat->user_id = Auth::id();
+            $newzakat->save();
+        }
+
+        $hijri_haul = $zakat->start_haul;
+        $hijri_haul_year = \GeniusTS\HijriDate\Hijri::convertToHijri($hijri_haul)->format('Y');
+        $hijri_haul_month = \GeniusTS\HijriDate\Hijri::convertToHijri($hijri_haul)->format('m');
+        $hijri_haul_day = \GeniusTS\HijriDate\Hijri::convertToHijri($hijri_haul)->format('d');
         return view('users.dashboard.index', [
+            'connection'=> $connection,
             'yprofit' => $yprofit,
             'yprofit_gregorian' => $yprofit_gregorian,
             'price' => $seller,
@@ -213,6 +240,10 @@ class DashboardController extends Controller
             'hijri_mont' => $hijri_mont,
             'hijri_year' => $hijri_year,
             'hijri_mont_created_at' => $user_hijri_month,
+            'zakatcheck' => $zakat,
+            'hijri_haul_year' => $hijri_haul_year,
+            'hijri_haul_month' => $hijri_haul_month,
+            'hijri_haul_day' => $hijri_haul_day,
         ]);
     }
 

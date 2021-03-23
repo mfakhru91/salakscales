@@ -20,4 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::get('seller','PembelianApiController@index');
 Route::get('/setting/{id}','SettingApiController@getData');
+Route::put('zakat/{id}', 'ZakatApiController@update');
+Route::put('zakat/haul/{id}', 'ZakatApiController@haulupdate');
 Route::resource('tonase','TonaseController');

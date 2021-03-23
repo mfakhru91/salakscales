@@ -9,15 +9,15 @@
       <h3 class="panel-title">PRINT NOTA</h3>
     </div>
     <div class="panel-body" id="nota">
-      <table class="" style="width: 400px">
+      <table style="width: 100%">
         <tr>
-          <td rowspan="5">
+          <td rowspan="5" style="width: 120px">
             <img src="{{asset('public/image/logo_nota.png')}}" height="100px" alt="logo">
           </td>
         </tr>
         <tr>
           <th colspan="3" style="width: 200px">
-            <h3>Nota Salak Pondoh</h3>
+            <h3>Nota Salak Pondoh-{{ Auth::user()->business_name }}</h3>
           </th>
         </tr>
         <tr>
@@ -64,12 +64,27 @@
           </tr>
         </tbody>
       </table>
+      @if($item->note_id)
+        <div class="text-right" style="margin-top: 10%">
+          <table style="width: 100%">
+            <tr>
+              <td style="width: 80%"></td>
+              <td style="width: 20%;">
+                <hr style="border-top: 1px black solid; margin-bottom:0px;">
+                <div class="text-center">
+                  {{ Auth::user()->name }}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      @endif
     </div>
     <div class="panel-footer">
       <div class="row">
         <div class="col-md-1">
           @if($item->note_id)
-          <button type="button"  class="btn btn-info" onclick="printJS({ printable: 'nota', type: 'html', css:'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' })">
+          <button type="button"  class="btn btn-info" onclick="printJS({ printable: 'nota', type: 'html', css:'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css', })">
             <span class="lnr lnr-printer"></span> Print
           </button></div>
           @endif

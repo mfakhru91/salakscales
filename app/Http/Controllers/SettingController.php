@@ -97,6 +97,7 @@ class SettingController extends Controller
             $updateUser->avatar = $file;
         }
         $updateUser->name = $request->get('username');
+        $updateUser->business_name = $request->get('businessname');
         $updateUser->save();
         $Setting = Setting::where('user_id', $id)
             ->update([

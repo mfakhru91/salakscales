@@ -74,7 +74,8 @@ $arr_additional_item = [];
                         <tr>
                             <th colspan="4">
                                 <div class="text-center">
-                                    <h3>Laporan Laba/Rugi</h3>
+                                    <h5>Salak Pondoh - {{ Auth::user()->business_name }}</h5>
+                                    <h3 style="margin-top: 0px">Laporan Laba Rugi</h3>
                                     Untuk Periode {{ $start_day }} Sampai {{$end_day}}
                                 </div>
                             </th>

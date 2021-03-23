@@ -11,15 +11,15 @@
     <div class="panel-body" id="nota">
       <div class="row">
         <div class="col-xs-12">
-          <table class="">
+          <table style="width: 100%">
             <tr>
-              <td rowspan="7">
+              <td rowspan="7" style="width: 120px">
                 <img src="{{asset('public/image/logo_nota.png')}}" height="100px" alt="logo">
               </td>
             </tr>
             <tr>
               <th colspan="3" style="width: 200px">
-                <h3>Nota Salak Pondoh</h3>
+                <h3>Nota Salak Pondoh-{{ Auth::user()->business_name }}</h3>
               </th>
             </tr>
             <tr>
@@ -86,6 +86,21 @@
           </tr>
         </tbody>
       </table>
+      @if($item->note_id)
+        <div class="text-right" style="margin-top: 10%">
+          <table style="width: 100%">
+            <tr>
+              <td style="width: 80%"></td>
+              <td style="width: 20%;">
+                <hr style="border-top: 1px black solid; margin-bottom:0px;">
+                <div class="text-center">
+                  {{ Auth::user()->name }}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      @endif
     </div>
     <div class="panel-footer">
       <div class="row">

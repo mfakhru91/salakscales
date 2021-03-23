@@ -20,6 +20,12 @@
                 <input type="file" name="avatar" class="form-control-file" id="exampleFormControlFile1">
             </div>
             <div class="form-group row">
+                <label for="userName" class="col-sm-2 col-form-label">Nama Usaha</label>
+                <div class="col-sm-10">
+                    <input type="Text" class="form-control" id="businessname" name="businessname" placeholder="Nama Usaha" value="{{$user->business_name}}">
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="userName" class="col-sm-2 col-form-label">Nama Pengguna</label>
                 <div class="col-sm-10">
                     <input type="Text" class="form-control" id="userName" name="username" placeholder="Nama Pengguna" value="{{$user->name}}">

@@ -53,7 +53,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Pembelian lain</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -66,6 +66,13 @@
                             <input type="text" class="form-control" name="date" data-toggle="datepicker" placeholder="tanggal pembelian">
                             @if($errors->has('date'))
                                 <span class="help-block">{{ $errors->first('date') }}</span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Nama Penanggung Jawab</label>
+                            <input type="text" class="form-control" id="responsiblePerson" name="responsible_person" placeholder="nama penanggung jawab">
+                            @if($errors->has('responsible_person'))
+                                <span class="help-block">{{ $errors->first('responsible_person') }}</span>
                             @endif
                         </div>
                         <div class="form-group">
@@ -108,6 +115,7 @@
                 <tr>
                     <th>Tanggal</th>
                     <th>Nama</th>
+                    <th>Penanggung jawab</th>
                     <th>jumlah</th>
                     <th>Harga</th>
                     <th>Total</th>
@@ -119,6 +127,7 @@
                 <tr>
                     <td>{{$item->date}}</td>
                     <td>{{$item->name}}</td>
+                    <td>{{$item->responsible_person}}</td>
                     <td>{{$item->unit}}</td>
                     <td>{{$item->price}}</td>
                     <td>{{$item->unit * $item->price}}</td>
