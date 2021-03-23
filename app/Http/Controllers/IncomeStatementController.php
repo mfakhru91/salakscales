@@ -76,6 +76,29 @@ class IncomeStatementController extends Controller
                 ->get();
         }
 
+        // get year income
+        $additionaltemYear =  Bookkeeping_journal::where('user_id', Auth::id())
+            ->whereYear('date', Carbon::now('y')->timezone('Asia/Jakarta'))
+            ->get();
+
+        $profitYear = Buyer::withCount(array('dvitem as price' => function ($query) {
+            return $query->select(DB::raw('sum(price)'))
+                ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+                ->where('status', '1');
+        }))
+            ->withCount(array('dvitem as income' => function ($query) {
+                return $query->select(DB::raw('sum(income)'))
+                    ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+                    ->where('status', '1');
+            }))
+            ->withCount(array('dvitem as tonase' => function ($query) {
+                return $query->select(DB::raw('sum(new_tonase)'))
+                    ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
+                    ->where('status', '1');
+            }))
+            ->where('user_id', Auth::id())
+            ->get();
+
         $start = Carbon::now()->startOfMonth()->format('d F y');
         $end = Carbon::now()->endOfMonth()->format('d F y');
         return view('users.income-statement.index', [
@@ -84,6 +107,8 @@ class IncomeStatementController extends Controller
             'start_day' => $start,
             'end_day' => $end,
             'date_selected' => $date_selected,
+            'additionaltemYear'=> $additionaltemYear,
+            'profitYear'=> $profitYear
 
         ]);
     }
