@@ -56,6 +56,9 @@ Route::group(['middleware' => 'auth','middleware' => 'verified' ], function () {
 	Route::get('/additional-item/{id}/delete', 'AdditionalItemController@delete')->name('additional-item.delete');
 	Route::get('/additional-item/export', 'AdditionalItemController@export')->name('additional-item.export');
 
+	// income statement
+	Route::get('laporan-laba-rugi/tahun','IncomeStatementController@detaildata')->name('incomestatement.year');
+
 	// resource controller routing
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('pembelian', 'PembelianController');

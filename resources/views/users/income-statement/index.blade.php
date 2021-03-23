@@ -193,6 +193,7 @@ $year_additem_total = array_sum($year_additem);
                         </div>
                     </div>
                 </div>
+                <a href="{{ route('incomestatement.year') }}" class="btn btn-primary btn-block">detail</a>
             </div>
         </div>
     </div>

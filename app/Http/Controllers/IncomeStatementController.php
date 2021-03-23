@@ -107,8 +107,8 @@ class IncomeStatementController extends Controller
             'start_day' => $start,
             'end_day' => $end,
             'date_selected' => $date_selected,
-            'additionaltemYear'=> $additionaltemYear,
-            'profitYear'=> $profitYear
+            'additionaltemYear' => $additionaltemYear,
+            'profitYear' => $profitYear
 
         ]);
     }
@@ -177,5 +177,53 @@ class IncomeStatementController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function detaildata()
+    {
+        $data = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $income_arr = [];
+            $additionaltem_arr = [];
+            $income = Buyer::withCount(array('dvitem as price' => function ($query) use ($i) {
+                return $query->select(DB::raw('sum(price)'))
+                    ->whereMonth('date_time', $i)
+                    ->where('status', '1');
+            }))
+                ->withCount(array('dvitem as income' => function ($query) use ($i) {
+                    return $query->select(DB::raw('sum(income)'))
+                        ->whereMonth('date_time', $i)
+                        ->where('status', '1');
+                }))
+                ->withCount(array('dvitem as tonase' => function ($query) use ($i) {
+                    return $query->select(DB::raw('sum(new_tonase)'))
+                        ->whereMonth('date_time', $i)
+                        ->where('status', '1');
+                }))
+                ->where('user_id', Auth::id())
+                ->get();
+
+            $additionaltem =  Bookkeeping_journal::where('user_id', Auth::id())
+                ->whereMonth('date', $i)
+                ->get();
+            
+            foreach ($additionaltem as $item ) {
+                $total_additional_items = $item->unit * $item->price;
+                array_push($additionaltem_arr, $total_additional_items);
+            }
+
+            foreach ($income as $income) {
+                $total_akomodasi = $income->tools * $income->tonase + $income->packing * $income->tonase + $income->shipping_charges * $income->tonase;
+                $sum_income = $income->income - $income->price - $total_akomodasi;
+                array_push($income_arr, $sum_income);
+            }
+            $sum_income = array_sum($income_arr);
+            $sum_additem = array_sum($additionaltem_arr);
+            $total = $sum_income - $sum_additem;
+            array_push($data,$total);
+        }
+        return view('users.income-statement.detail', [
+            'income' => $data,
+        ]);
     }
 }
