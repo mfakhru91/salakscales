@@ -74,7 +74,6 @@
             </div>
         @endif
     @endif
-    <!-- pengertian zakaat -->
     <div class="panel">
         <div class="panel-heading">
             <h3 class="panel-title">Pengertian Zakat</h3>
@@ -105,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <p>dengan ketentuan telah mencapai <b>Nishab</b> yang setara denga <b>82 gram emas</b> dan telah mencapai
+            <p>dengan ketentuan telah mencapai <b>Nishab</b> yang setara denga <b>85 gram emas</b> dan telah mencapai
                 <b>Haul</b>
             </p>
             <br>
@@ -132,6 +131,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="panel-footer">
+            <h3>Untuk pengertian lebih lanjut silahkan klik link <a href="{{ route('zakat.understanding') }}"> <u>tentang zakat perniagaan</u> </a></h3>
         </div>
     </div>
     <div class="panel">

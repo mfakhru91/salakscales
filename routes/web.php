@@ -59,6 +59,11 @@ Route::group(['middleware' => 'auth','middleware' => 'verified' ], function () {
 	// income statement
 	Route::get('laporan-laba-rugi/tahun','IncomeStatementController@detaildata')->name('incomestatement.year');
 
+	// understanding of zakat
+	Route::get('dashboard/zakat', function () {
+		return view('users.dashboard.zakat');
+	})->name('zakat.understanding');
+
 	// resource controller routing
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('pembelian', 'PembelianController');
