@@ -3,16 +3,10 @@
     <nav>
       <ul class="nav">
         <li><a href="{{ route('dashboard.index') }}" class="{{ Request::routeIs('dashboard.index') ? 'active' : '' }}"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
-        <li>
-          <a href="#subPages" data-toggle="collapse" class="collapsed @if(Request::routeIs('pembelian.index') || Request::routeIs('penjualan.index')) active @endif"><i class="lnr lnr-users"></i> <span>Transaksi</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-          <div id="subPages" class="collapse ">
-            <ul class="nav">
-              <li><a href="{{ route('pembelian.index') }}" class="{{ Request::routeIs('pembelian.index') ? 'active' : '' }}"><i class="lnr lnr-cart"></i><span>Pembelian</span></a></li>
-              <li><a href="{{ route('penjualan.index') }}" class="{{ Request::routeIs('penjualan.index') ? 'active' : '' }}"><i class="lnr lnr-briefcase"></i><span>Penjualan</span></a></li>
-            </ul>
-          </div>
-        </li>
-        <li><a href="{{ route('barang.index') }}" class="{{ Request::routeIs('barang.index')? 'active' : '' }}"><i class="lnr lnr-database"></i><span>Barang</span></a></li>
+        <li><a href="{{ route('pembelian.index') }}" class="{{ Request::routeIs('pembelian.index') ? 'active' : '' }}"><i class="lnr lnr-cart"></i><span>Pembelian</span></a></li>
+        <li><a href="{{ route('barang.index') }}" class="{{ Request::routeIs('barang.index')? 'active' : '' }}"><i class="lnr lnr-database"></i><span>Stok</span></a></li>
+        <li><a href="{{ route('grading.index') }}" class="{{ Request::routeIs('grading.index') ? 'active' : '' }}"><i class="far fa-clipboard"></i><span>Grading</span></a></li>
+        <li><a href="{{ route('penjualan.index') }}" class="{{ Request::routeIs('penjualan.index') ? 'active' : '' }}"><i class="lnr lnr-briefcase"></i><span>Penjualan</span></a></li>
         <li>
           <a href="#laporan" data-toggle="collapse" class="collapsed @if(Request::routeIs('laporan.index') || Request::routeIs('bookkeeping.index')) active @endif"><span class="lnr lnr-book"></span> <span>Laporan</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
           <div id="laporan" class="collapse ">

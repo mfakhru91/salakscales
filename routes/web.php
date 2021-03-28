@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DvitemController;
+use App\Http\Controllers\GradingController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,9 @@ Route::group(['middleware' => 'auth','middleware' => 'verified' ], function () {
 		return view('users.dashboard.zakat');
 	})->name('zakat.understanding');
 
+	// grading
+	Route::get('grading/{id}/delete', 'GradingController@delete')->name('grading.delete');
+
 	// resource controller routing
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('pembelian', 'PembelianController');
@@ -78,6 +82,7 @@ Route::group(['middleware' => 'auth','middleware' => 'verified' ], function () {
 	Route::resource('jurnal-penjualan', 'JurnalPenjualanController');
 	Route::resource('additional-item', 'AdditionalItemController');
 	Route::resource('laporan-laba-rugi', 'IncomeStatementController');
+	Route::resource('grading', 'GradingController');
 
 
 });

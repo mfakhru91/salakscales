@@ -43,9 +43,9 @@
           <hr>
         </div>
         <div class="profile-info">
+          <h4 class="heading">Harga Jual <span>Rp. {{ number_format($buyyers->selling_price, 2, ',', '.') }}</span></h4>
           <h4 class="heading">Akomodasi</h4>
           <ul class="list-unstyled list-justify">
-            <li>Harga Jual<span>Rp. {{ number_format($buyyers->selling_price, 2, ',', '.') }}</span></li>
             <li>Alat<span>Rp. {{ number_format($buyyers->tools, 2, ',', '.') }}</span></li>
             <li>Pengepakan<span>Rp. {{ number_format($buyyers->packing, 2, ',', '.') }}</span></li>
             <li>Pengiriman<span>Rp. {{ number_format($buyyers->shipping_charges, 2, ',', '.') }}</span></li>
@@ -54,7 +54,6 @@
              $get_profit_m = $monthItem->sum('income') - $monthItem->sum('price') - ($buyyers->tools * $monthItem->sum('new_tonase')) -  ($buyyers->packing * $monthItem->sum('new_tonase')) - ($buyyers->shipping_charges * $monthItem->sum('new_tonase'));
              $get_profit_d = $dayItem->sum('income') - $dayItem->sum('price') - ($buyyers->tools * $dayItem->sum('new_tonase')) -  ($buyyers->packing * $dayItem->sum('new_tonase')) - ($buyyers->shipping_charges * $dayItem->sum('new_tonase'));
             @endphp
-            <li><b>Keuntungan<span>Rp. {{ number_format($get_profit_y, 2, ',', '.') }}</span></b></li>
           </ul>
         </div>
         <div class="text-center"><a href="{{ route('penjualan.edit',$buyyers->id) }}" class="btn btn-primary btn-block">Edit Profile</a></div>
