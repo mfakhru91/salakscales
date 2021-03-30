@@ -86,19 +86,20 @@
                     @endif
                     @endif
                     <tr>
-                        <th colspan="8">
+                        <th colspan="9">
                             <h3>Laporan Penjualan</h3>
                         </th>
                     </tr>
                     <tr>
                         <th>Tanggal</th>
-                        <th colspan="7">: <span> </span> {{ $from }} - {{ $to }}</th>
+                        <th colspan="8">: <span> </span> {{ $from }} - {{ $to }}</th>
                     </tr>
                     <tr>
                         <th>Tanggal</th>
                         <th>Nama</th>
                         <th>Pasar</th>
                         <th colspan="2">Tonase</th>
+                        <th>Grading</th>
                         <th>Harga</th>
                         <th>Nota</th>
                         <th>Penjualan</th>
@@ -115,6 +116,9 @@
                         <td>{{$by->market}}</td>
                         <td>{{$item->new_tonase}}</td>
                         <td width="1px" class="text-center">Kg</td>
+                        @foreach ($grading->where('id',$item->grading_id) as $gr)
+                        <td>{{ $gr->name }}</td>
+                        @endforeach
                         <td>Rp.{{ number_format($item->price, 2, ',', '.')}}</td>
                         <td>{{$item->note_id}}</td>
                         <td>Rp.{{ number_format($item->income, 2, ',', '.')}}</td>
@@ -123,63 +127,15 @@
                     @endforeach
                     @endif
                     <tr>
-                        <th colspan="7">Total</th>
+                        <th colspan="8">Total</th>
                         <th>
                             @if($profit == null)
                             @else
-                                Rp.{{ number_format($profit->sum('income'), 2, ',', '.')}}
+                                Rp.{{ number_format($dvitem->sum('income'), 2, ',', '.')}}
                             @endif
                         </th>
                     </tr>
-                    <tr>
-                        <td colspan="5" style="border: 0px; background-color: white;"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="border: 0px; background-color: white;"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="5" style="background-color: white;">Total Keseluruhan</th>
-                    </tr>
-                    <tr>
-                        <th>Pasar</th>
-                        <th>Akomodasi</th>
-                        <th>Harga</th>
-                        <th>Penjualan</th>
-                        <th>Kenutungan</th>
-                    </tr>
-                    @if($profit == null)
-                    @else
-                    @foreach($profit as $by)
-                    @php
-                    $addakomodasi = $by->tools + $by->packing + $by->shipping_charges;
-                    $addtotal_akomodasi = $addakomodasi * $by->tonase;
-                    $addsum_income = $by->income - $by->price - $addtotal_akomodasi;
-                    @endphp
-                    <tr>
-                        <td>{{ $by->market }}</td>
-                        <td>Rp.{{ number_format($addtotal_akomodasi, 2, ',', '.')}}</td>
-                        <td>Rp.{{ number_format($by->price, 2, ',', '.')}}</td>
-                        <td>Rp.{{ number_format($by->income, 2, ',', '.')}}</td>
-                        <td>
-                            @if($addtotal_akomodasi == 0)
-                                Rp.0,00
-                            @else
-                            Rp.{{ number_format($by->income - $by->price - $addtotal_akomodasi, 2, ',', '.')}}
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
-                    <tr>
-                        @if($items == null)
-                        @else
-                        </tr>
-                        <tr>
-                            <th colspan="4">Total</th>
-                            <th>
-                                Rp.{{ number_format( $sum_profit, 2, ',', '.')}}
-                        </tr>
-                        @endif
-                    @endif
+                    
                 </tbody>
             </table>
         </div>

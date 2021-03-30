@@ -31,19 +31,19 @@ class JournalLedgerController extends Controller
                 ->whereMonth('date', $month)
                 ->get();
 
-            $profit = Buyer::withCount(array('dvitem as price' => function ($query) use ($lastMonth, $year, $month) {
+            $profit = Buyer::withCount(array('graded_item as price' => function ($query) use ($lastMonth, $year, $month) {
                 return $query->select(DB::raw('sum(price)'))
                     ->whereMonth('date_time', $month)
                     ->whereYear('date_time', $year)
                     ->where('status', '1');
             }))
-                ->withCount(array('dvitem as income' => function ($query) use ($lastMonth, $year, $month) {
+                ->withCount(array('graded_item as income' => function ($query) use ($lastMonth, $year, $month) {
                     return $query->select(DB::raw('sum(income)'))
                         ->whereMonth('date_time', $month)
                         ->whereYear('date_time', $year)
                         ->where('status', '1');
                 }))
-                ->withCount(array('dvitem as tonase' => function ($query) use ($lastMonth, $year, $month) {
+                ->withCount(array('graded_item as tonase' => function ($query) use ($lastMonth, $year, $month) {
                     return $query->select(DB::raw('sum(new_tonase)'))
                         ->whereMonth('date_time', $month)
                         ->whereYear('date_time', $year)
@@ -62,17 +62,17 @@ class JournalLedgerController extends Controller
                 ->whereMonth('date', $lastMonth)
                 ->get();
 
-            $profit = Buyer::withCount(array('dvitem as price' => function ($query) use ($lastMonth) {
+            $profit = Buyer::withCount(array('graded_item as price' => function ($query) use ($lastMonth) {
                 return $query->select(DB::raw('sum(price)'))
                     ->whereMonth('date_time', $lastMonth)
                     ->where('status', '1');
             }))
-                ->withCount(array('dvitem as income' => function ($query) use ($lastMonth) {
+                ->withCount(array('graded_item as income' => function ($query) use ($lastMonth) {
                     return $query->select(DB::raw('sum(income)'))
                         ->whereMonth('date_time', $lastMonth)
                         ->where('status', '1');
                 }))
-                ->withCount(array('dvitem as tonase' => function ($query) use ($lastMonth) {
+                ->withCount(array('graded_item as tonase' => function ($query) use ($lastMonth) {
                     return $query->select(DB::raw('sum(new_tonase)'))
                         ->whereMonth('date_time', $lastMonth)
                         ->where('status', '1');

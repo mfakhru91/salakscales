@@ -11,10 +11,13 @@ class Buyer extends Model
   {
     return $this->hasMany('App\Dvitem');
   }
-
-  public function dvitem_delivery()
+  public function graded_item()
   {
-    return $this->dvitem()->where('status', '0')->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'));
+    return $this->hasMany('App\Graded_item');
+  }
+  public function graded_item_delivery()
+  {
+    return $this->graded_item()->where('status', '0')->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'));
   }
 
   public function count_dvitem()

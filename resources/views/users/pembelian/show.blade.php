@@ -81,8 +81,8 @@
                   <label for="payment">Pembayaran</label>
                   <select class="form-control" name="payment">
                     <option value="" selected>Pembayaran</option>
-                    <option value="debt">Hutang</option>
-                    <option value="paid off">Lunas</option>
+                    <option value="debt">Tempo</option>
+                    <option value="paid off">Cash</option>
                   </select>
                 </div>
             </div>
@@ -115,6 +115,7 @@
                 <th>TONASE</th>
                 <th>HARGA</th>
                 <th>PEMBAYARAN</th>
+                <th>Status</th>
                 <th>NO NOTA</th>
                 <th>ACTION</th>
               </tr>
@@ -128,10 +129,17 @@
                   <td> {{ $item->tonase }} </td>
                   <td> Rp. {{ number_format($item->price, 2, ',', '.') }} </td>
                   @if ($item->payment == 'paid off')
-                    <td>Lunas</td>
+                    <td>Cash</td>
                   @else
-                    <td>Hutang</td>
+                    <td>Tempo</td>
                   @endif
+                  <td>
+                      @if ($item->delivery == '1')
+                        Terkonfirmasi
+                      @else
+                        Belum Dikonfirmasi
+                      @endif
+                  </td>
                   <td>
                     <form action="{{ route('print.note') }}" id="note" method="post">
                       @csrf

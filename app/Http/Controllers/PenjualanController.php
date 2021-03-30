@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Buyer;
 use App\Dvitem;
+use App\Graded_Item;
+use App\Grading;
+use App\JournalLedger;
 use Auth;
 
 class PenjualanController extends Controller
@@ -69,39 +72,39 @@ class PenjualanController extends Controller
         $user = Auth::id();
 
         // get one row of delivered data
-        $itemDelivered = Dvitem::orderBy('id', 'DESC')->take(1)
+        $itemDelivered = Graded_Item::orderBy('id', 'DESC')->take(1)
             ->where('user_id', $user)
             ->first();
 
         // check old tonase data
         if ($itemDelivered->old_tonase == null) {
-            $data = Dvitem::Select('user_id', 'buyer_Id', 'date_time', 'new_tonase as tonase',)
+            $data = Graded_Item::Select('user_id', 'buyer_Id', 'date_time', 'new_tonase as tonase',)
                 ->orderBy('id', 'DESC')->take(1)
                 ->where('user_id', $user)
                 ->first();
         } else {
-            $data = Dvitem::Select('user_id', 'buyer_Id', 'date_time', 'old_tonase as tonase',)
+            $data = Graded_Item::Select('user_id', 'buyer_Id', 'date_time', 'old_tonase as tonase',)
                 ->orderBy('id', 'DESC')->take(1)
                 ->where('user_id', $user)
                 ->first();
         }
 
         //get delivery item evry Year
-        $YearItem = Dvitem::where('user_id', Auth::id())
+        $YearItem = Graded_Item::where('user_id', Auth::id())
             ->where('status', '1')
             ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
             ->where('buyer_id', $id)
             ->get();
 
         //get delivery item evry month
-        $MonthItem = Dvitem::where('user_id', Auth::id())
+        $MonthItem = Graded_Item::where('user_id', Auth::id())
             ->where('status', '1')
             ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
             ->where('buyer_id', $id)
             ->get();
 
         //get delivery item evry day
-        $DayItem = Dvitem::where('user_id', Auth::id())
+        $DayItem = Graded_Item::where('user_id', Auth::id())
             ->where('status', '1')
             ->whereDay('date_time', Carbon::now('d')->timezone('Asia/Jakarta'))
             ->where('buyer_id', $id)
@@ -110,11 +113,12 @@ class PenjualanController extends Controller
         $buyyers = Buyer::where('id', $id)->first();
 
         // get buyyer delivered item
-        $buyyerDevItem = Dvitem::where('user_id', $user)
+        $buyyerDevItem = Graded_Item::where('user_id', $user)
             ->where('buyer_id', $id)
             ->orderBy('status', 'asc')
             ->get();
-
+        //grade 
+        $grading = Grading::where('buyer_id', $id)->get();
         return view('users.penjualan.show', [
             'buyyers' => $buyyers,
             'user' => $user,
@@ -122,7 +126,8 @@ class PenjualanController extends Controller
             'monthItem' => $MonthItem,
             'yearItem' => $YearItem,
             'dayItem' => $DayItem,
-            'buyyerItem' => $buyyerDevItem
+            'buyyerItem' => $buyyerDevItem,
+            'grading' => $grading,
         ]);
     }
 
@@ -193,15 +198,18 @@ class PenjualanController extends Controller
 
     public function addItems(Request $request)
     {
+        list($price,$grading_id) = explode('|', $_POST['grading']);
         $date = Carbon::now()->format('Y-m-d');
-        $addNewItem = new Dvitem;
+        $addNewItem = new Graded_Item;
         $addNewItem->user_id = Auth::id();
         $addNewItem->buyer_id =  $request->get('buyyer_id');
         $addNewItem->date_time = $date;
         $addNewItem->new_tonase = $request->get('new_tonase');
         $addNewItem->old_tonase = $request->get('old_tonase');
         $addNewItem->price = $request->get('price');
+        $addNewItem->grading_id = $grading_id;
         $addNewItem->save();
+
         return redirect()->route('penjualan.show', $request->get('buyyer_id'))->with('status', 'berhasil menambahkan pengiriman baranh');
     }
     public function income(Request $request)

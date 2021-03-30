@@ -7,6 +7,7 @@ use App\Item;
 use App\Seller;
 use App\Buyer;
 use App\Dvitem;
+use App\Graded_Item;
 
 class PrintController extends Controller
 {
@@ -33,7 +34,7 @@ class PrintController extends Controller
 			$note_id = $request->get('note');
 		}
 		$buyer = Buyer::findOrFail($request->get('buyer_id'));
-		$items = Dvitem::where('note_id', $note_id)->get();
+		$items = Graded_Item::where('note_id', $note_id)->get();
 		return view('users.barang.byprint', [
 			'items' => $items,
 			'buyer' => $buyer,

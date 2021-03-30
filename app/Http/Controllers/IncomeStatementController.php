@@ -25,17 +25,17 @@ class IncomeStatementController extends Controller
                 ->whereMonth('date', Carbon::now('m')->timezone('Asia/Jakarta'))
                 ->get();
 
-            $profit = Buyer::withCount(array('dvitem as price' => function ($query) {
+            $profit = Buyer::withCount(array('graded_item as price' => function ($query) {
                 return $query->select(DB::raw('sum(price)'))
                     ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
-                ->withCount(array('dvitem as income' => function ($query) {
+                ->withCount(array('graded_item as income' => function ($query) {
                     return $query->select(DB::raw('sum(income)'))
                         ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                         ->where('status', '1');
                 }))
-                ->withCount(array('dvitem as tonase' => function ($query) {
+                ->withCount(array('graded_item as tonase' => function ($query) {
                     return $query->select(DB::raw('sum(new_tonase)'))
                         ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                         ->where('status', '1');
@@ -54,19 +54,19 @@ class IncomeStatementController extends Controller
                 ->whereYear('date', $year)
                 ->get();
 
-            $profit = Buyer::withCount(array('dvitem as price' => function ($query) use ($month, $year) {
+            $profit = Buyer::withCount(array('graded_item as price' => function ($query) use ($month, $year) {
                 return $query->select(DB::raw('sum(price)'))
                     ->whereMonth('date_time', $month)
                     ->whereYear('date_time', $year)
                     ->where('status', '1');
             }))
-                ->withCount(array('dvitem as income' => function ($query) use ($month, $year) {
+                ->withCount(array('graded_item as income' => function ($query) use ($month, $year) {
                     return $query->select(DB::raw('sum(income)'))
                         ->whereMonth('date_time', $month)
                         ->whereYear('date_time', $year)
                         ->where('status', '1');
                 }))
-                ->withCount(array('dvitem as tonase' => function ($query) use ($month, $year) {
+                ->withCount(array('graded_item as tonase' => function ($query) use ($month, $year) {
                     return $query->select(DB::raw('sum(new_tonase)'))
                         ->whereMonth('date_time', $month)
                         ->whereYear('date_time', $year)
@@ -86,12 +86,12 @@ class IncomeStatementController extends Controller
                 ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) {
+            ->withCount(array('graded_item as income' => function ($query) {
                 return $query->select(DB::raw('sum(income)'))
                     ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) {
+            ->withCount(array('graded_item as tonase' => function ($query) {
                 return $query->select(DB::raw('sum(new_tonase)'))
                     ->whereYear('date_time', Carbon::now('y')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
@@ -185,17 +185,17 @@ class IncomeStatementController extends Controller
         for ($i = 1; $i <= 12; $i++) {
             $income_arr = [];
             $additionaltem_arr = [];
-            $income = Buyer::withCount(array('dvitem as price' => function ($query) use ($i) {
+            $income = Buyer::withCount(array('graded_item as price' => function ($query) use ($i) {
                 return $query->select(DB::raw('sum(price)'))
                     ->whereMonth('date_time', $i)
                     ->where('status', '1');
             }))
-                ->withCount(array('dvitem as income' => function ($query) use ($i) {
+                ->withCount(array('graded_item as income' => function ($query) use ($i) {
                     return $query->select(DB::raw('sum(income)'))
                         ->whereMonth('date_time', $i)
                         ->where('status', '1');
                 }))
-                ->withCount(array('dvitem as tonase' => function ($query) use ($i) {
+                ->withCount(array('graded_item as tonase' => function ($query) use ($i) {
                     return $query->select(DB::raw('sum(new_tonase)'))
                         ->whereMonth('date_time', $i)
                         ->where('status', '1');

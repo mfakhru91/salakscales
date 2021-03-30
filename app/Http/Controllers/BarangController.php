@@ -10,6 +10,7 @@ use App\Seller;
 use App\Dvitem;
 use App\Buyer;
 use App\JournalLedger;
+use App\Graded_Item;
 use Auth;
 
 class BarangController extends Controller
@@ -36,12 +37,15 @@ class BarangController extends Controller
     }))
       ->where('user_id', Auth::id())
       ->get();
+
+    $dvitems_data = Dvitem::where('user_id',Auth::id())->orderBy('status','asc')->get();
     return view('users.barang.index', [
       'items' => $items,
       'sellers' => $sellers,
       'dvitems' => $dvitems,
       'dvsellers' => $dvsellers,
-      'user' => $user
+      'user' => $user,
+      'dvitems_data' => $dvitems_data
     ]);
   }
 
@@ -187,7 +191,7 @@ class BarangController extends Controller
     ]);
     $buyer = Buyer::findOrFail($request->get('buyer_id'));
     $item = $request->get('item');
-    $dvitems = Dvitem::find($item);
+    $dvitems = Graded_Item::find($item);
     $note_id = null;
     return view('users.barang.byprint', [
       'items' => $dvitems,
@@ -256,6 +260,6 @@ class BarangController extends Controller
     $item->new_tonase = $request->get('tonase');
     $item->date_time = $date;
     $item->save();
-    return redirect()->route('barang.index')->with('status', 'barang terconfirmasi');;
+    return redirect()->route('barang.index')->with('status', 'barang terconfirmasi');
   }
 }

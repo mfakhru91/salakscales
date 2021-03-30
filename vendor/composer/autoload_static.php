@@ -535,6 +535,7 @@ class ComposerStaticInit7e1c1fbca83e381379412f27636fc0b6
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Dvitem' => __DIR__ . '/../..' . '/app/Dvitem.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Graded_Item' => __DIR__ . '/../..' . '/app/Graded_Item.php',
         'App\\Grading' => __DIR__ . '/../..' . '/app/Grading.php',
         'App\\Http\\Controllers\\AdditionalItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdditionalItemController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',

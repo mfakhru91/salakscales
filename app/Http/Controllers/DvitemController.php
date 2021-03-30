@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Dvitem;
 use App\Buyer;
 use App\JournalLedger;
+use App\Graded_Item;
+use App\Grading;
 use Carbon\Carbon;
 use Auth;
 
@@ -62,12 +64,15 @@ class DvitemController extends Controller
     public function edit($id)
     {
         $userId = Auth::id();
-        $dvitem = Dvitem::findOrFail($id);
+        $dvitem = Graded_Item::findOrFail($id);
         $buyer = Buyer::where('id', $dvitem->buyer_Id)->first();
+        // $ = Grading::where('id',$dvitem->grading_id)->first();
+        $grading =  Grading::where('buyer_id',$dvitem->buyer_Id)->get();    
         return view('users.dvbarang.edit', [
             'buyer' => $buyer,
             'item' => $dvitem,
-            'user' => $userId
+            'user' => $userId,
+            'grading' => $grading,
         ]);
     }
 
@@ -81,9 +86,11 @@ class DvitemController extends Controller
     public function update(Request $request, $id)
     {
         $buyer = Buyer::findOrFail($request->get('buyerId'));
-        $dvitem = Dvitem::findOrFail($id);
+        list($price,$grading_id) = explode('|', $request->get('grading'));
+        $dvitem = Graded_Item::findOrFail($id);
         $dvitem->price = $request->get('price');
         $dvitem->income = $request->get('income');
+        $dvitem->grading_id = $grading_id;
         $dvitem->save();
 
         $JournalLedger = JournalLedger::where('dvitem_id',$id)->first();
@@ -113,7 +120,7 @@ class DvitemController extends Controller
     public function deliveryUpdate(Request $request)
     {
 
-        $dvitem = Dvitem::findOrFail($request->get('item_id'));
+        $dvitem = Graded_Item::findOrFail($request->get('item_id'));
         $buyer_id = $dvitem->buyer_Id;
         $buyer = Buyer::findOrFail($buyer_id);
         $buyerId = $request->get('buyer_id');
@@ -136,10 +143,21 @@ class DvitemController extends Controller
     }
     public function delete($id)
     {
-        $dvitem = Dvitem::findOrFail($id);
+        $dvitem = Graded_Item::findOrFail($id);
+        $date = Carbon::now()->format('Y-m-d');
+        $addNewItem = new Graded_Item;
+        $addNewItem->user_id = Auth::id();
+        $addNewItem->buyer_id = $dvitem->buyer_id;
+        $addNewItem->date_time = $date;
+        $addNewItem->new_tonase = $dvitem->new_tonase;
+        $addNewItem->old_tonase = $dvitem->old_tonase;
+        $addNewItem->price = $dvitem->price;
+        $addNewItem->save();
         $JournalLedger = JournalLedger::where('dvitem_id',$id)->first();
+        if ($JournalLedger != null) {
+            $JournalLedger->delete();
+        }
         $dvitem->delete();
-        $JournalLedger->delete();
         return redirect()->route('penjualan.show', $dvitem->buyer_Id)->with('status', 'Berhasil Menghapus Barang');
     }
 }

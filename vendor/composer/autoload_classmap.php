@@ -12,6 +12,7 @@ return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Dvitem' => $baseDir . '/app/Dvitem.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Graded_Item' => $baseDir . '/app/Graded_Item.php',
     'App\\Grading' => $baseDir . '/app/Grading.php',
     'App\\Http\\Controllers\\AdditionalItemController' => $baseDir . '/app/Http/Controllers/AdditionalItemController.php',
     'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',

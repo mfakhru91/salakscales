@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Dvitem;
+use App\Graded_Item;
 use App\Buyer;
 use App\Seller;
 use App\Item;
 use App\Bookkeeping_journal;
+use App\Grading;
 use Auth;
 
 
@@ -30,7 +32,7 @@ class JurnalPenjualanController extends Controller
             $items = null;
             $profit = null;
         } elseif ($to == null) {
-            $dvitem =  Dvitem::where('user_id', Auth::id())
+            $dvitem =  Graded_Item::where('user_id', Auth::id())
                 ->whereDate('date_time', $from)
                 ->where('status', '1')
                 ->orderBy('date_time', 'ASC')
@@ -80,7 +82,7 @@ class JurnalPenjualanController extends Controller
                 ->where('user_id', Auth::id())
                 ->get();
         } else {
-            $dvitem =  Dvitem::where('user_id', Auth::id())
+            $dvitem =  Graded_Item::where('user_id', Auth::id())
                 ->whereBetween('date_time', [$from, $to])
                 ->where('status', '1')
                 ->orderBy('date_time', 'ASC')
@@ -142,7 +144,8 @@ class JurnalPenjualanController extends Controller
         $select_buyer = Buyer::where('user_id', Auth::id())
             ->get();
 
-
+        // grading 
+        $grading = Grading::get();
         return view('users.jurnal-penjualan.index', [
             'dvitem' => $dvitem,
             'buyer' => $buyer,
@@ -152,6 +155,7 @@ class JurnalPenjualanController extends Controller
             'from' => $from,
             'to' => $to,
             'market' => $market,
+            'grading' => $grading,
         ]);
     }
 
@@ -222,7 +226,7 @@ class JurnalPenjualanController extends Controller
 
     public function searchMont(Request $request)
     {
-        $dvitem =  Dvitem::where('user_id', Auth::id())
+        $dvitem =  Graded_Item::where('user_id', Auth::id())
             ->whereDate('date_time', $request->get('cari'))
             ->get();
         $buyer = Buyer::where('user_id', Auth::id())->get();

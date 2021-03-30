@@ -82,10 +82,10 @@ class DashboardController extends Controller
             ->get();
 
         //get delivered item
-        $dvitems = Buyer::withCount('dvitem_delivery as dvcounting')->where('user_id', Auth::id())->get();
+        $dvitems = Buyer::withCount('graded_item_delivery as dvcounting')->where('user_id', Auth::id())->get();
 
         // all items
-        $deliveryItem = Buyer::withCount('dvitem as dvitem')
+        $deliveryItem = Buyer::withCount('graded_item as dvitem')
             ->where('user_id', Auth::id())
             ->get();
 
@@ -99,17 +99,17 @@ class DashboardController extends Controller
             ->get();
 
         // income this year
-        $yprofit = Buyer::withCount(array('dvitem as price' => function ($query) use ($year_hijri_start, $year_hijri_end) {
+        $yprofit = Buyer::withCount(array('graded_item as price' => function ($query) use ($year_hijri_start, $year_hijri_end) {
             return $query->select(DB::raw('sum(price)'))
                 ->whereBetween('date_time', [$year_hijri_start, $year_hijri_end])
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) use ($year_hijri_start, $year_hijri_end) {
+            ->withCount(array('graded_item as income' => function ($query) use ($year_hijri_start, $year_hijri_end) {
                 return $query->select(DB::raw('sum(income)'))
                     ->whereBetween('date_time', [$year_hijri_start, $year_hijri_end])
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) use ($year_hijri_start, $year_hijri_end) {
+            ->withCount(array('graded_item as tonase' => function ($query) use ($year_hijri_start, $year_hijri_end) {
                 return $query->select(DB::raw('sum(new_tonase)'))
                     ->whereBetween('date_time', [$year_hijri_start, $year_hijri_end])
                     ->where('status', '1');
@@ -118,17 +118,17 @@ class DashboardController extends Controller
             ->get();
 
         // income this year
-        $yprofit_gregorian = Buyer::withCount(array('dvitem as price' => function ($query){
+        $yprofit_gregorian = Buyer::withCount(array('graded_item as price' => function ($query){
             return $query->select(DB::raw('sum(price)'))
                 ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'))
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query){
+            ->withCount(array('graded_item as income' => function ($query){
                 return $query->select(DB::raw('sum(income)'))
                     ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query){
+            ->withCount(array('graded_item as tonase' => function ($query){
                 return $query->select(DB::raw('sum(new_tonase)'))
                     ->whereYear('created_at', Carbon::now('Y')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
@@ -141,17 +141,17 @@ class DashboardController extends Controller
             ->get();
 
         // income this month
-        $mprofit = Buyer::withCount(array('dvitem as price' => function ($query) {
+        $mprofit = Buyer::withCount(array('graded_item as price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))
                 ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) {
+            ->withCount(array('graded_item as income' => function ($query) {
                 return $query->select(DB::raw('sum(income)'))
                     ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) {
+            ->withCount(array('graded_item as tonase' => function ($query) {
                 return $query->select(DB::raw('sum(new_tonase)'))
                     ->whereMonth('date_time', Carbon::now('m')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
@@ -164,17 +164,17 @@ class DashboardController extends Controller
             ->get();
 
         // income this day
-        $dprofit = Buyer::withCount(array('dvitem as price' => function ($query) {
+        $dprofit = Buyer::withCount(array('graded_item as price' => function ($query) {
             return $query->select(DB::raw('sum(price)'))
                 ->whereDay('date_time', Carbon::now('d')->timezone('Asia/Jakarta'))
                 ->where('status', '1');
         }))
-            ->withCount(array('dvitem as income' => function ($query) {
+            ->withCount(array('graded_item as income' => function ($query) {
                 return $query->select(DB::raw('sum(income)'))
                     ->whereDay('date_time', Carbon::now('d')->timezone('Asia/Jakarta'))
                     ->where('status', '1');
             }))
-            ->withCount(array('dvitem as tonase' => function ($query) {
+            ->withCount(array('graded_item as tonase' => function ($query) {
                 return $query->select(DB::raw('sum(new_tonase)'))
                     ->whereDay('date_time', Carbon::now('d')->timezone('Asia/Jakarta'))
                     ->where('status', '1');

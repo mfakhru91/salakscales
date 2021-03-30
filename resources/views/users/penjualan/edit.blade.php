@@ -43,16 +43,6 @@
         <h4>AKOMODASI</h4>
         <div class="row">
           <div class="col-md-6">
-            <label for="selling_price">Harga Jual</label>
-            <div class="input-group {{ $errors->has('selling_price')? 'has-error':'' }} ">
-              <span class="input-group-addon">Rp</span>
-              <input type="number" class="form-control" name="selling_price" value="{{ $buyer->selling_price }}" placeholder="harga jual">
-            </div>
-            @if($errors->has('selling_price'))
-              <span class="help-block" >{{ $errors->first('selling_price') }}</span>
-            @endif
-          </div>
-          <div class="col-md-6">
             <label for="no_telp">Pengepakan</label>
             <div class="input-group {{ $errors->has('packing')? 'has-error':'' }} ">
               <span class="input-group-addon">Rp</span>
@@ -62,9 +52,6 @@
               <span class="help-block" >{{ $errors->first('packing') }}</span>
             @endif
           </div>
-        </div>
-        <br>
-        <div class="row">
           <div class="col-md-6">
             <label for="tools">Alat</label>
             <div class="input-group {{ $errors->has('tools')? 'has-error':'' }} ">
@@ -75,6 +62,9 @@
               <span class="help-block" >{{ $errors->first('tools') }}</span>
             @endif
           </div>
+        </div>
+        <br>
+        <div class="row">
           <div class="col-md-6">
             <label for="shipping_charges">Ongkos Kirim</label>
             <div class="input-group {{ $errors->has('shipping_charges')? 'has-error':'' }} ">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Dvitem;
+use App\Graded_Item;
 use App\Note;
 use App\Item;
 use Auth;
@@ -100,7 +101,7 @@ class NoteController extends Controller
         $note->user_id = Auth::id();
         $note->save();
         $note_id = Note::latest('id')->where('user_id', Auth::id())->first();
-        $item = Dvitem::whereIn('id', $item_id)->update(['note_id' => $note->id]);
+        $item = Graded_Item::whereIn('id', $item_id)->update(['note_id' => $note->id]);
         return redirect()->route('penjualan.show', $request->get('buyer_id'));
     }
 }

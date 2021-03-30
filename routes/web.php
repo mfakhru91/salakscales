@@ -67,6 +67,13 @@ Route::group(['middleware' => 'auth','middleware' => 'verified' ], function () {
 
 	// grading
 	Route::get('grading/{id}/delete', 'GradingController@delete')->name('grading.delete');
+	Route::post('grading/items/confirmation','GradingController@confirmation_grade')->name('grading.confirmation');
+	Route::post('grading/items/confirmation/store','GradingController@graded_store_item')->name('grading.confirmation.store');
+
+    // gradeing items
+    Route::get('grading/item/{id}/edit', 'GradingController@grade_item_edit')->name('grading.item.edit');
+    Route::put('grading/item/{id}/update','GradingController@grade_item_update')->name('grading.item.update');
+    Route::get('grading/item/{id}/delete','GradingController@grade_item_delete')->name('grading.item.delete');
 
 	// resource controller routing
 	Route::resource('dashboard', 'DashboardController');
